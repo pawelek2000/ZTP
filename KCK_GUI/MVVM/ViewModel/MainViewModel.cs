@@ -30,7 +30,9 @@ namespace KCK_GUI.MVVM.ViewModel
         public PlaylistViewModel PlaylistVM { get; set; }
         public List<MusicFile> favSongList { get; set; }
 
+        MusicFilesManager musicFilesManager { get; set; } 
         private BackgroundWorker _bgWorker { get; set; }
+
 
         public MainViewModel()
         {
@@ -40,6 +42,9 @@ namespace KCK_GUI.MVVM.ViewModel
             PlayStopImage = new Image();
             FavImage = new Image();
 
+            musicFilesManager = MusicFilesManager.GetInstance();
+            musicFilesManager.GetMusicFiles();
+            Song test = musicFilesManager.GetNextSong();
 
 
             Player = MusicPlayer.GetInstance();

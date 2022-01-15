@@ -12,7 +12,6 @@ namespace KCK_GUI.MVVM.Model
         public static MusicFile currentSong { get; set; }
         public static string playlistPath { get; set; }
         public static bool IsCurrentSongChanged { get; set; }
-        public static MPlayer Player { get; set; }
 
     }
 }

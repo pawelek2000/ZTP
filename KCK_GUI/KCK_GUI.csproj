@@ -116,9 +116,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MVVM\Model\ConfigClass.cs" />
-    <Compile Include="MVVM\Model\MPlayer.cs" />
     <Compile Include="MVVM\Model\MusicFile.cs" />
+    <Compile Include="MVVM\Model\MusicFilesManager.cs" />
     <Compile Include="MVVM\Model\MusicPlayer.cs" />
+    <Compile Include="MVVM\Model\Song.cs" />
     <Compile Include="MVVM\ViewModel\MainViewModel.cs" />
     <Compile Include="MVVM\ViewModel\PlaylistViewModel.cs" />
     <Compile Include="MVVM\ViewModel\SearchViewModel.cs" />
