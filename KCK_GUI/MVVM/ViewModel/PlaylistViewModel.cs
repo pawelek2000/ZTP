@@ -17,9 +17,10 @@ namespace KCK_GUI.MVVM.ViewModel
         public RelayCommand DeleteFromPlaylistCommand { get; set; }
         public RelayCommand AddToPlaylistCommand { get; set; }
         public List<MusicFile> TempList { get; set; }
-
+        MusicPlayer Player { get; set; }
         public PlaylistViewModel()
         {
+            Player = MusicPlayer.GetInstance();
             PlaylistMusicFiles = new ObservableCollection<MusicFile>();
             //TODO zmaienic na COnfigclas.pathPlaylist to samo dać jak się przechodzi pomiędzy guzik playlist wyszukiwarka
             UpdatePlaylist();
@@ -120,7 +121,9 @@ namespace KCK_GUI.MVVM.ViewModel
         public void PlayFromPlaylist(MusicFile file)
         {
             ConfigClass.currentSong = file;
-            ConfigClass.IsCurrentSongChanged = true;
+            Player.Stop();
+            Player.Open(ConfigClass.currentSong.MusicPath);
+            Player.Play();
         }
         public void DeleteFormPlaylist(MusicFile file) 
         {
