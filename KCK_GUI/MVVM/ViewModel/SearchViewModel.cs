@@ -19,12 +19,12 @@ namespace KCK_GUI.MVVM.ViewModel
         public RelayCommand SearchBoxCommand { get; set; }
         public RelayCommand PlayFormSearchCommand { get; set; }
         public List<MusicFile>  TempList { get; set; }
-        
-        
+        MusicPlayer Player { get; set; }
+
         public SearchViewModel()
         {
             ConfigClass.musicFiles = MusicFile.GetMusicFiles();
-
+            Player = MusicPlayer.GetInstance();
             TestText = new ObservableCollection<string>();
             Visibilities = new ObservableCollection<Visibility>();
 
@@ -94,7 +94,11 @@ namespace KCK_GUI.MVVM.ViewModel
         public void PlayFromSearch(string Title)
         {
             ConfigClass.currentSong = ConfigClass.musicFiles.Find(p => p.Title == Title);
-            ConfigClass.IsCurrentSongChanged = true;
+            Player.Stop();
+            Player.Open(ConfigClass.currentSong.MusicPath);
+            Player.Play();
+
+            
         }
 
 

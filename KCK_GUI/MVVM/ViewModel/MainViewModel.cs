@@ -24,8 +24,8 @@ namespace KCK_GUI.MVVM.ViewModel
         public RelayCommand PlayNextCommand { get; set; }
         public RelayCommand PlayPrevCommand { get; set; }
         public RelayCommand SerceBolesneCommand { get; set; }
-        
 
+        MusicPlayer Player { get; set; }
         public SearchViewModel SearchVM{ get; set; }
         public PlaylistViewModel PlaylistVM { get; set; }
         public List<MusicFile> favSongList { get; set; }
@@ -39,13 +39,13 @@ namespace KCK_GUI.MVVM.ViewModel
             CurrentView = SearchVM;
             PlayStopImage = new Image();
             FavImage = new Image();
-            
 
 
-            ConfigClass.Player = new MPlayer();
+
+            Player = MusicPlayer.GetInstance();
             ConfigClass.musicFiles = MusicFile.GetMusicFiles();
             ConfigClass.currentSong = ConfigClass.musicFiles[0];
-            ConfigClass.Player.Open(ConfigClass.currentSong.MusicPath);
+            Player.Open(ConfigClass.currentSong.MusicPath);
             ConfigClass.playlistPath = "";
             ConfigClass.IsCurrentSongChanged = false;
             favSongList = MusicFile.GetPlaylist("Data/fav.json");
@@ -65,24 +65,19 @@ namespace KCK_GUI.MVVM.ViewModel
              {
                  while (true)
                  {
-                     if (ConfigClass.Player.play)
+                     if (Player.IsPlaying)
                      {
 
                          Thread.Sleep(100);
-                         CurrentTime = ConfigClass.Player.CurrentSongTime();
-                         MainProgresBar = ConfigClass.Player.CurrentSongTimePercent() * 100;
+                         UpdateSongInfo();
 
                      }
 
-                     if (ConfigClass.Player.SongTimeEnd()) 
+                     if (Player.IsSongTimeEnd()) 
                      {
-                         ConfigClass.Player.Stop();
+                         Player.Stop();
                      }
-                     if (ConfigClass.IsCurrentSongChanged) 
-                     {
-                         PlayNew();
-                         ConfigClass.IsCurrentSongChanged = false;
-                     }
+                   
                  }
              };
             _bgWorker.RunWorkerAsync();
@@ -167,14 +162,14 @@ namespace KCK_GUI.MVVM.ViewModel
             {
                 bi = new BitmapImage();
                 bi.BeginInit();
-                if (ConfigClass.Player.play)
+                if (Player.IsPlaying)
                 {
-                    ConfigClass.Player.Pause();
+                    Player.Pause();
                     bi.UriSource = new Uri(PLAY_IMAGE, UriKind.Relative);
                 }
                 else
                 {
-                    ConfigClass.Player.Play();
+                    Player.Play();
                     bi.UriSource = new Uri(PAUSE_IMAGE, UriKind.Relative);
                 }
                 bi.EndInit();
@@ -280,8 +275,9 @@ namespace KCK_GUI.MVVM.ViewModel
             get { return _volumeSlider; }
             set
             {
+
                 _volumeSlider = value;
-                ConfigClass.Player.SetVolume(_volumeSlider);
+                Player.SetVolume(_volumeSlider);
                 OnPropertyChanged();
             }
         }
@@ -310,9 +306,9 @@ namespace KCK_GUI.MVVM.ViewModel
         public void UpdateSongInfo() 
         {
             Title = ConfigClass.currentSong.Title;
-            SongTime = ConfigClass.Player.SongTime();
-            CurrentTime = ConfigClass.Player.CurrentSongTime();
-            MainProgresBar = ConfigClass.Player.CurrentSongTimePercent();
+            SongTime = Player.getSongLength();
+            CurrentTime = Player.getCurrentSongTime();
+            MainProgresBar = Player.getCurrentSongTimePercent();
         }
 
         public void PlayNext() 
@@ -351,12 +347,12 @@ namespace KCK_GUI.MVVM.ViewModel
         {
             if (Application.Current.Dispatcher.CheckAccess())
             {
-                ConfigClass.Player.Stop();
-                ConfigClass.Player.Open(ConfigClass.currentSong.MusicPath);
+                Player.Stop();
+                Player.Open(ConfigClass.currentSong.MusicPath);
                 UpdateFavButton();
                 UpdateSongInfo();
-                ConfigClass.Player.SetVolume(VolumeSlider * 10);
-                ConfigClass.Player.Play();
+                Player.SetVolume(VolumeSlider * 10);
+                Player.Play();
                 BitmapImage bi = new BitmapImage();
                 bi.BeginInit();
                 bi.UriSource = new Uri(PAUSE_IMAGE, UriKind.Relative);
@@ -370,12 +366,12 @@ namespace KCK_GUI.MVVM.ViewModel
                 Application.Current.Dispatcher.BeginInvoke(
                      DispatcherPriority.Background,
                     new Action(() => {
-                        ConfigClass.Player.Stop();
-                        ConfigClass.Player.Open(ConfigClass.currentSong.MusicPath);
+                        Player.Stop();
+                        Player.Open(ConfigClass.currentSong.MusicPath);
                         UpdateFavButton();
                         UpdateSongInfo();
-                        ConfigClass.Player.SetVolume(VolumeSlider * 10);
-                        ConfigClass.Player.Play();
+                        Player.SetVolume(VolumeSlider * 10);
+                        Player.Play();
                         BitmapImage bi = new BitmapImage();
                         bi.BeginInit();
                         bi.UriSource = new Uri(PAUSE_IMAGE, UriKind.Relative);
