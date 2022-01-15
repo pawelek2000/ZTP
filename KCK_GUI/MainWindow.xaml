@@ -1,0 +1,321 @@
+﻿<Window x:Class="KCK_GUI.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:viewModel="clr-namespace:KCK_GUI.MVVM.ViewModel"
+        xmlns:view="clr-namespace:KCK_GUI.MVVM.View"
+        xmlns:local="clr-namespace:KCK_GUI"
+        mc:Ignorable="d"
+        Height="750" Width="750"
+        WindowStyle="None"
+        ResizeMode="NoResize"
+        Background="Transparent"
+        AllowsTransparency="True">
+
+    <Window.DataContext>
+        <viewModel:MainViewModel/>
+    </Window.DataContext>
+
+    <Border Background="#6B717E"
+            CornerRadius="10">
+
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="200" />
+                <ColumnDefinition />
+
+            </Grid.ColumnDefinitions>
+
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="530"/>
+                <RowDefinition Height="100"/>
+            </Grid.RowDefinitions>
+
+            <Border Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    Margin="0,0,33,100"
+                    MouseDown="Window_MouseDown"
+                    BorderThickness="0,0,0,30"
+                    BorderBrush="#5E636E"
+                    CornerRadius="10,0,0,0">
+
+            </Border>
+
+            <Border Grid.Row="0"
+                    Grid.ColumnSpan="2"
+                    Margin="716,0,0,100"
+                    
+                    BorderThickness="2"
+                    BorderBrush="#5E636E"
+                    Background="#5E636E"
+                    CornerRadius="0,9,0,0">
+
+                <Button Content="✕"
+                        Background="Transparent"
+                        Foreground="#FFE8E1"
+                        FontSize="12"
+                        BorderThickness="0"
+                        HorizontalContentAlignment="Center"
+                        VerticalContentAlignment="Center" RenderTransformOrigin="0.133,0.433" Margin="-2"
+                        Click="CloseWindowButton_Click">
+                    <Button.Resources>
+                        <Style TargetType="{x:Type Border}">
+                            <Setter Property="CornerRadius" Value="0,8,0,0"/>
+                        </Style>
+                    </Button.Resources>
+
+                </Button>
+
+            </Border>
+
+
+
+
+            <Border Grid.Row="0" Grid.RowSpan="2" BorderThickness="0,0,2,0" BorderBrush="#5E636E" Margin="0,30,0,10">
+                <StackPanel Grid.Row="0" Grid.RowSpan="2">
+
+                    <RadioButton Content="Wyszukaj utwory"
+                                 Height="50"
+                                 Foreground="#FFE8E1"
+                                 FontSize="20"
+                                 Style="{StaticResource MenuButtonTheme}"
+                                 Margin="-25,25,0,0"
+                                 Command="{Binding SearchViewCommand}"
+                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                 Name="rb0"/>
+
+
+                    <RadioButton Content="Ulubione"
+                                 Height="50"
+                                 Foreground="#FFE8E1"
+                                 FontSize="16"
+                                 Style="{StaticResource MenuButtonTheme}"
+                                 Margin="0,25,0,0"
+                                 Command="{Binding PlatlistViewCommand}"
+                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                 Name="rb1"/>
+
+                    <RadioButton Content="Playlista 1"
+                                 Height="50"
+                                 Foreground="#FFE8E1"
+                                 FontSize="16"
+                                 Style="{StaticResource MenuButtonTheme}"
+                                 Command="{Binding PlatlistViewCommand}"
+                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                 Name="rb2"/>
+
+                    <RadioButton Content="Playlista 2"
+                                 Height="50"
+                                 Foreground="#FFE8E1"
+                                 FontSize="16"
+                                 Style="{StaticResource MenuButtonTheme}"
+                                 Command="{Binding PlatlistViewCommand}"
+                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                 Name="rb3"/>
+
+                    <RadioButton Content="Playlista 3"
+                                 Height="50"
+                                 Foreground="#FFE8E1"
+                                 FontSize="16"
+                                 Style="{StaticResource MenuButtonTheme}"
+                                 Command="{Binding PlatlistViewCommand}"
+                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                 Name="rb4"/>
+
+                    <RadioButton Content="Playlista 4"
+                                 Height="50"
+                                 Foreground="#FFE8E1"
+                                 FontSize="16"
+                                 Style="{StaticResource MenuButtonTheme}"
+                                 Command="{Binding PlatlistViewCommand}"
+                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                 Name="rb5"/>
+
+                    <RadioButton Content="Playlista 5"
+                                 Height="50"
+                                 Foreground="#FFE8E1"
+                                 FontSize="16"
+                                 Style="{StaticResource MenuButtonTheme}"
+                                 Command="{Binding PlatlistViewCommand}"
+                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                 Name="rb6"/>
+
+                    <RadioButton Content="Playlista 6"
+                                 Height="50"
+                                 Foreground="#FFE8E1"
+                                 FontSize="16"
+                                 Style="{StaticResource MenuButtonTheme}"
+                                 Command="{Binding PlatlistViewCommand}"
+                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                 Name="rb7"/>
+
+                    <RadioButton Content="Playlista 7"
+                                 Height="50"
+                                 Foreground="#FFE8E1"
+                                 FontSize="16"
+                                 Style="{StaticResource MenuButtonTheme}"
+                                 Command="{Binding PlatlistViewCommand}"
+                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                 Name="rb8"/>
+
+                    <RadioButton Content="Playlista 8"
+                                 Height="50"
+                                 Foreground="#FFE8E1"
+                                 FontSize="16"
+                                 Style="{StaticResource MenuButtonTheme}"
+                                 Command="{Binding PlatlistViewCommand}"
+                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                 Name="rb9"/>
+
+                    <RadioButton Content="Playlista 9"
+                                 Height="50"
+                                 Foreground="#FFE8E1"
+                                 FontSize="16"
+                                 Style="{StaticResource MenuButtonTheme}"
+                                 Command="{Binding PlatlistViewCommand}"
+                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
+                                 Name="rb10"/>
+
+
+
+                </StackPanel>
+            </Border>
+            <Border Grid.Row="2" Grid.ColumnSpan="2" BorderThickness="0,2,0,0" BorderBrush="#5E636E" Margin="10,0,10,0">
+                <StackPanel>
+                    <Grid Height="40">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <Button Grid.Column="2"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                FontSize="25"
+                                Foreground="#EFAAC4"
+                                Margin="36,10,36,0"
+                                Background="Transparent"
+                                Command="{Binding PlayStopMusicCommand}">
+
+                            <Image Source="{Binding PlayStopImage.Source}"/>
+
+                        </Button>
+                        <Button 
+                                Grid.Column="2"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Top"
+                                FontSize="25"
+                                Foreground="#EFAAC4"
+                                Margin="0,10,5,0"
+                                Background="Transparent" RenderTransformOrigin="0.95,0.467"
+                                Command="{Binding PlayNextCommand}">
+
+                            <Image Source="Images\icons8-end-50.png"/>
+
+                        </Button>
+                        <Button 
+                              Grid.Column="2"
+                              HorizontalAlignment="Left"
+                              VerticalAlignment="Top"
+                              FontSize="25"
+                              Foreground="#EFAAC4"
+                              Margin="5,10,0,0"
+                              Background="Transparent" RenderTransformOrigin="0.95,0.467"
+                              Command="{Binding PlayPrevCommand}">
+
+                            <Image Source="Images\icons8-skip-to-start-50.png"/>
+
+                        </Button>
+                        <Button 
+                                Grid.Column="0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Top"
+                                FontSize="23"
+                                Foreground="#EFAAC4"
+                                Margin="36,13,36,0"
+                                Background="Transparent"
+                                Command="{Binding SerceBolesneCommand}">
+
+                            <Image Source="{Binding FavImage.Source}"
+                                   Width="20"
+                                   Height="20"/>
+
+                        </Button>
+                        
+
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                         <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <ProgressBar Grid.Column="1"
+                                     Margin="0,0,0,0"
+                                     Background="#FFE8E1"
+                                     Foreground="#EFAAC4"
+                                     Style="{StaticResource MenuProgressBarTheme}"
+                                     Value="{Binding MainProgresBar}"
+                                     Height="4"/>
+                        
+                        <Label Grid.Column="0"
+                               Content="{Binding CurrentTime}"
+                               HorizontalAlignment="Right"
+                               VerticalAlignment="Bottom"
+                               Foreground="#EFAAC4"/>
+
+                        <Label Grid.Column="2"
+                               Content="{Binding SongTime}"
+                               HorizontalAlignment="Left"
+                               VerticalAlignment="Bottom"
+                               Foreground="#EFAAC4"/>
+
+                        <Slider Grid.Column="2"
+                                HorizontalAlignment="Right"
+                                VerticalAlignment="Center" 
+                                Width="100"
+                                Maximum="100"
+                                Value="{Binding VolumeSlider}"
+                                Foreground="#EFAAC4" Style="{DynamicResource MySliderTheme}">
+                            <Slider.Resources>
+                                <Style TargetType="{x:Type Border}">
+                                    <Setter Property="CornerRadius" Value="8"/>
+                                </Style>
+                            </Slider.Resources>
+                        </Slider>
+                    </Grid>
+
+
+
+                </StackPanel>
+            </Border>
+
+
+            <ContentControl Grid.Row="0"
+                            Grid.Column="1"
+                            Grid.RowSpan="2"
+                            Margin="10,25,10,10"
+                            Content="{Binding CurrentView}"/>
+            
+            <Label Content="{Binding Title}"
+                   HorizontalAlignment="Center"
+                   Foreground="#EFAAC4"
+                   Grid.Row="2"
+                   VerticalAlignment="Top"
+                   Margin="24,60,26,0"
+                   Width="700"
+                   Height="27"
+                   HorizontalContentAlignment="Center"
+                   VerticalContentAlignment="Center" Grid.ColumnSpan="2" />
+
+
+        </Grid>
+
+    </Border>
+</Window>

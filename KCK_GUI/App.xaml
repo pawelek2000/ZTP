@@ -1,0 +1,28 @@
+﻿<Application x:Class="KCK_GUI.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:local="clr-namespace:KCK_GUI"
+             xmlns:viewModel="clr-namespace:KCK_GUI.MVVM.ViewModel"
+             xmlns:view="clr-namespace:KCK_GUI.MVVM.View"
+             StartupUri="MainWindow.xaml">
+              
+    <Application.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Theme/MenuButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/MenuProgressBarTheme.xaml"/>
+                <ResourceDictionary Source="Theme/MusicManagerButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/MySliderTheme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+
+            <DataTemplate DataType="{x:Type viewModel:SearchViewModel}">
+                <view:SearchView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:PlaylistViewModel}">
+                <view:PlaylistView/>
+            </DataTemplate>
+            
+        </ResourceDictionary>
+    </Application.Resources>
+</Application>
