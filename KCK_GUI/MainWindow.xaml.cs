@@ -35,5 +35,10 @@ namespace KCK_GUI
         {
             Application.Current.Shutdown();
         }
+
+        private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

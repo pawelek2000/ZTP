@@ -16,14 +16,17 @@ namespace KCK_GUI.MVVM.ViewModel
         public RelayCommand PlayFormPlaylistCommand { get; set; }
         public RelayCommand DeleteFromPlaylistCommand { get; set; }
         public RelayCommand AddToPlaylistCommand { get; set; }
-        public List<MusicFile> TempList { get; set; }
-        MusicPlayer Player { get; set; }
+        public List<Song> TempList { get; set; }
+        MusicPlayer musicPlayer { get; set; }
+        MusicFilesManager musicFilesManager { get; set; }
+        public JsonManager CurrentJsonFile { get; set; }
         public PlaylistViewModel()
         {
-            Player = MusicPlayer.GetInstance();
-            PlaylistMusicFiles = new ObservableCollection<MusicFile>();
-            //TODO zmaienic na COnfigclas.pathPlaylist to samo dać jak się przechodzi pomiędzy guzik playlist wyszukiwarka
-            UpdatePlaylist();
+            musicPlayer = MusicPlayer.GetInstance();
+            musicFilesManager = MusicFilesManager.GetInstance();
+            CurrentSongList = new ObservableCollection<Song>();
+            
+            
             TestText = new ObservableCollection<string>();
             Visibilities = new ObservableCollection<Visibility>();
 
@@ -44,20 +47,14 @@ namespace KCK_GUI.MVVM.ViewModel
             });
             AddToPlaylistCommand = new RelayCommand(o =>
             {
+                musicFilesManager.LoadAllMusicFiles();
                 var button = (o as RadioButton);
-                AddToPlaylist(MusicFile.GetMusicFiles().Find(p => p.Title == button.Content.ToString()));
+                AddToPlaylist(musicFilesManager.getAllSongsList().Find(p => p.Title == button.Content.ToString()));
             });
 
 
         }
-        public void UpdatePlaylist()
-        {
-            PlaylistMusicFiles.Clear();
-            if (ConfigClass.playlistPath == null || ConfigClass.playlistPath == "")
-                MusicFile.GetPlaylist("Data/fav.json").ForEach(PlaylistMusicFiles.Add);
-            else
-                MusicFile.GetPlaylist(ConfigClass.playlistPath).ForEach(PlaylistMusicFiles.Add);
-        }
+       
         public string SearchText
         {
             get { return _searchText; }
@@ -72,16 +69,16 @@ namespace KCK_GUI.MVVM.ViewModel
 
         private string _searchText;
 
-        public ObservableCollection<MusicFile> PlaylistMusicFiles
+        public ObservableCollection<Song> CurrentSongList
         {
-            get { return _playlistMusicFiles; }
+            get { return _currentSongList; }
             set
             {
-                _playlistMusicFiles = value;
+                _currentSongList = value;
                 OnPropertyChanged();
             }
         }
-        private ObservableCollection<MusicFile> _playlistMusicFiles;
+        private ObservableCollection<Song> _currentSongList;
 
         public ObservableCollection<string> TestText
         {
@@ -107,7 +104,7 @@ namespace KCK_GUI.MVVM.ViewModel
 
 
 
-        public MusicFile SelectedMusicFile
+        public Song SelectedMusicFile
         {
             get { return _selectedMusicFile; }
             set
@@ -116,38 +113,37 @@ namespace KCK_GUI.MVVM.ViewModel
                 OnPropertyChanged();
             }
         }
-        private MusicFile _selectedMusicFile;
+        private Song _selectedMusicFile;
 
-        public void PlayFromPlaylist(MusicFile file)
+        public void PlayFromPlaylist(Song file)
         {
-            ConfigClass.currentSong = file;
-            Player.Stop();
-            Player.Open();
-            Player.Play();
+            musicPlayer.setCurrentSong(file);
+            musicPlayer.Stop();
+            musicPlayer.Open();
+            musicPlayer.Play();
         }
-        public void DeleteFormPlaylist(MusicFile file) 
+        public void DeleteFormPlaylist(Song file) 
         {
-            //TODO TO SAMO CO NA GÓRA
-            MusicFile.DeleteMusic(file, ConfigClass.playlistPath);
-            PlaylistMusicFiles.Remove(file);
+            musicFilesManager.DeleteMusicFromPlaylist(file, CurrentJsonFile);
+            CurrentSongList.Remove(file);
 
         }
-        public void AddToPlaylist(MusicFile file)
+        public void AddToPlaylist(Song file)
         {
-            //TODO TO SAMO CO NA GÓRA
             UpdateSearchresults();
-            MusicFile.AddMusic(file, ConfigClass.playlistPath);
-            if(PlaylistMusicFiles.ToList().Find(p=>p.MusicPath==file.MusicPath)==null)
-                PlaylistMusicFiles.Add(file);
+            musicFilesManager.AddMusicToPlaylist(file, CurrentJsonFile);
+            if(CurrentSongList.ToList().Find(p=>p.Path==file.Path)==null)
+                CurrentSongList.Add(file);
             UpdateSearchresults();
 
         }
         public void UpdateSearchresults() 
         {
-            TempList = ConfigClass.musicFiles.Where(p => p.Title.ToLower().Contains(_searchText.ToLower())).ToList();
-            foreach (var item in PlaylistMusicFiles)
+            musicFilesManager.LoadAllMusicFiles();
+            TempList = musicFilesManager.getAllSongsList().Where(p => p.Title.ToLower().Contains(_searchText.ToLower())).ToList();
+            foreach (var item in CurrentSongList)
             {
-                TempList.Remove(TempList.Find(p => p.MusicPath == item.MusicPath));
+                TempList.Remove(TempList.Find(p => p.Path == item.Path));
             }
             for (int i = 0; i < 4; i++)
             {
@@ -162,6 +158,13 @@ namespace KCK_GUI.MVVM.ViewModel
                     Visibilities[i] = Visibility.Hidden;
                 }
             }
+        }
+        public void UpdatePlaylist() 
+        {
+            CurrentSongList.Clear();
+            if(CurrentJsonFile!=null)
+            musicFilesManager.LoadPlaylist(CurrentJsonFile);
+            musicFilesManager.getCurrentPlaylist().ForEach(CurrentSongList.Add);
         }
     }
 }

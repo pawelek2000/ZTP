@@ -71,116 +71,50 @@
             </Border>
 
 
-
-
-            <Border Grid.Row="0" Grid.RowSpan="2" BorderThickness="0,0,2,0" BorderBrush="#5E636E" Margin="0,30,0,10">
-                <StackPanel Grid.Row="0" Grid.RowSpan="2">
-
-                    <RadioButton Content="Wyszukaj utwory"
+            <RadioButton Content="Wyszukaj utwory"
                                  Height="50"
                                  Foreground="#FFE8E1"
                                  FontSize="20"
-                                 Style="{StaticResource MenuButtonTheme}"
-                                 Margin="-25,25,0,0"
+                                 Style="{StaticResource MenuSearchButtonTheme}"
+                                 Margin="-25,15,0,0"
                                  Command="{Binding SearchViewCommand}"
                                  CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
                                  Name="rb0"/>
+            
+            <Border Grid.Row="0" Grid.RowSpan="2" BorderThickness="0,0,2,0" BorderBrush="#5E636E" Margin="0,150,0,10">
+                
+                    <ListBox Background="Transparent"
+                             ItemsSource="{Binding JsonManagerList}"
+                             SelectedItem="{Binding SelectedJsonManager}" 
+                             SelectionChanged="ListBox_SelectionChanged"
+                             BorderBrush="Transparent"
+                             ScrollViewer.CanContentScroll="False"
+                             ScrollViewer.HorizontalScrollBarVisibility="Hidden"
+                             ScrollViewer.VerticalScrollBarVisibility="Hidden">
+                        <ListBox.ItemsPanel>
+                            <ItemsPanelTemplate>
+                                <StackPanel/>
+                            </ItemsPanelTemplate>
+                        </ListBox.ItemsPanel>
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                            <Label Content="{Binding Name}"
+                                   Height="50"
+                                   Width="200"
+                                   Foreground="#FFE8E1"
+                                   FontSize="16"
+                                   Margin="0,0,0,0"
+                                   Padding="20,10,0,0">
+                                <Label.InputBindings>
+                                    <MouseBinding Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext.PlatlistViewCommand}"       
+                                              Gesture="LeftClick"
+                                              CommandParameter="{Binding}"/>
+                                </Label.InputBindings>
+                            </Label>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
 
-
-                    <RadioButton Content="Ulubione"
-                                 Height="50"
-                                 Foreground="#FFE8E1"
-                                 FontSize="16"
-                                 Style="{StaticResource MenuButtonTheme}"
-                                 Margin="0,25,0,0"
-                                 Command="{Binding PlatlistViewCommand}"
-                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
-                                 Name="rb1"/>
-
-                    <RadioButton Content="Playlista 1"
-                                 Height="50"
-                                 Foreground="#FFE8E1"
-                                 FontSize="16"
-                                 Style="{StaticResource MenuButtonTheme}"
-                                 Command="{Binding PlatlistViewCommand}"
-                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
-                                 Name="rb2"/>
-
-                    <RadioButton Content="Playlista 2"
-                                 Height="50"
-                                 Foreground="#FFE8E1"
-                                 FontSize="16"
-                                 Style="{StaticResource MenuButtonTheme}"
-                                 Command="{Binding PlatlistViewCommand}"
-                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
-                                 Name="rb3"/>
-
-                    <RadioButton Content="Playlista 3"
-                                 Height="50"
-                                 Foreground="#FFE8E1"
-                                 FontSize="16"
-                                 Style="{StaticResource MenuButtonTheme}"
-                                 Command="{Binding PlatlistViewCommand}"
-                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
-                                 Name="rb4"/>
-
-                    <RadioButton Content="Playlista 4"
-                                 Height="50"
-                                 Foreground="#FFE8E1"
-                                 FontSize="16"
-                                 Style="{StaticResource MenuButtonTheme}"
-                                 Command="{Binding PlatlistViewCommand}"
-                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
-                                 Name="rb5"/>
-
-                    <RadioButton Content="Playlista 5"
-                                 Height="50"
-                                 Foreground="#FFE8E1"
-                                 FontSize="16"
-                                 Style="{StaticResource MenuButtonTheme}"
-                                 Command="{Binding PlatlistViewCommand}"
-                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
-                                 Name="rb6"/>
-
-                    <RadioButton Content="Playlista 6"
-                                 Height="50"
-                                 Foreground="#FFE8E1"
-                                 FontSize="16"
-                                 Style="{StaticResource MenuButtonTheme}"
-                                 Command="{Binding PlatlistViewCommand}"
-                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
-                                 Name="rb7"/>
-
-                    <RadioButton Content="Playlista 7"
-                                 Height="50"
-                                 Foreground="#FFE8E1"
-                                 FontSize="16"
-                                 Style="{StaticResource MenuButtonTheme}"
-                                 Command="{Binding PlatlistViewCommand}"
-                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
-                                 Name="rb8"/>
-
-                    <RadioButton Content="Playlista 8"
-                                 Height="50"
-                                 Foreground="#FFE8E1"
-                                 FontSize="16"
-                                 Style="{StaticResource MenuButtonTheme}"
-                                 Command="{Binding PlatlistViewCommand}"
-                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
-                                 Name="rb9"/>
-
-                    <RadioButton Content="Playlista 9"
-                                 Height="50"
-                                 Foreground="#FFE8E1"
-                                 FontSize="16"
-                                 Style="{StaticResource MenuButtonTheme}"
-                                 Command="{Binding PlatlistViewCommand}"
-                                 CommandParameter="{Binding RelativeSource={RelativeSource Self}}"
-                                 Name="rb10"/>
-
-
-
-                </StackPanel>
             </Border>
             <Border Grid.Row="2" Grid.ColumnSpan="2" BorderThickness="0,2,0,0" BorderBrush="#5E636E" Margin="10,0,10,0">
                 <StackPanel>

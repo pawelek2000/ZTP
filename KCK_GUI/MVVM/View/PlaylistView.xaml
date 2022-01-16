@@ -27,7 +27,7 @@
                     Width="520"
                     ScrollViewer.VerticalScrollBarVisibility="Hidden"
                     ScrollViewer.HorizontalScrollBarVisibility="Hidden"
-                    ItemsSource="{Binding PlaylistMusicFiles}"
+                    ItemsSource="{Binding CurrentSongList}"
                     SelectedItem="{Binding SelectedMusicFile}"
 	                Background="Transparent"
 	                HorizontalAlignment="Center"

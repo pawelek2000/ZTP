@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Threading;
 using System.Windows;
@@ -29,7 +30,7 @@ namespace KCK_GUI.MVVM.ViewModel
         MusicPlayer musicPlayer { get; set; }
         MusicFilesManager musicFilesManager { get; set; }
 
-        JsonManager FavPlaylistManager { get; set; }
+        JsonManager FavJsonManager { get; set; }
         public SearchViewModel SearchVM{ get; set; }
         public PlaylistViewModel PlaylistVM { get; set; }
         public List<Song> favSongList { get; set; }
@@ -49,8 +50,10 @@ namespace KCK_GUI.MVVM.ViewModel
             musicPlayer = MusicPlayer.GetInstance();
             musicFilesManager = MusicFilesManager.GetInstance();
 
-            FavPlaylistManager = new JsonManager("Data/fav.json");
-            musicFilesManager.LoadPlaylist(FavPlaylistManager);
+            JsonManagerList = new ObservableCollection<JsonManager>();
+            FavJsonManager = new JsonManager("Data/fav.json" , "Ulubione");
+            JsonManagerList.Add(FavJsonManager);
+            musicFilesManager.LoadPlaylist(FavJsonManager);
             favSongList = musicFilesManager.getAllSongsList();
 
             musicFilesManager.LoadAllMusicFiles();
@@ -59,6 +62,11 @@ namespace KCK_GUI.MVVM.ViewModel
             musicPlayer.Open();
 
             //ConfigClass.IsCurrentSongChanged = false;
+
+            for (int i = 1; i < 10; i++) 
+            {
+                JsonManagerList.Add(new JsonManager("Data/p"+i+".json" , "Playlist " + i));
+            }
             
             VolumeSlider = 50;
 
@@ -104,69 +112,11 @@ namespace KCK_GUI.MVVM.ViewModel
 
             PlatlistViewCommand = new RelayCommand(o =>
             {
-                var button = (o as RadioButton);
-                var name = button.Name.ToString();
-                switch (name)
-                {
-                    case  "rb1":
-                        {
-                            ConfigClass.playlistPath = "Data/fav.json";
-                            break;
-                        }
-                    case "rb2":
-                        {
-                            ConfigClass.playlistPath = "Data/p1.json";
-                            break;
-                        }
-                    case "rb3":
-                        {
-                            ConfigClass.playlistPath = "Data/p2.json";
-                            break;
-                        }
-                    case "rb4":
-                        {
-                            ConfigClass.playlistPath = "Data/p3.json";
-                            break;
-                        }
-                    case "rb5":
-                        {
-                            ConfigClass.playlistPath = "Data/p4.json";
-                            break;
-                        }
-                    case "rb6":
-                        {
-                            ConfigClass.playlistPath = "Data/p5.json";
-                            break;
-                        }
-                    case "rb7":
-                        {
-                            ConfigClass.playlistPath = "Data/p6.json";
-                            break;
-                        }
-                    case "rb8":
-                        {
-                            ConfigClass.playlistPath = "Data/p7.json";
-                            break;
-                        }
-                    case "rb9":
-                        {
-                            ConfigClass.playlistPath = "Data/p8.json";
-                            break;
-                        }
-                    case "rb10":
-                        {
-                            ConfigClass.playlistPath = "Data/p9.json";
-                           
-                            break;
-                        }
-
-
-
-                }
+                SelectedJsonManager = (o as JsonManager);
                 
                 CurrentView = PlaylistVM;
+                PlaylistVM.CurrentJsonFile = SelectedJsonManager;
                 PlaylistVM.UpdatePlaylist();
-
             });
 
             PlayStopMusicCommand = new RelayCommand(o =>
@@ -294,13 +244,35 @@ namespace KCK_GUI.MVVM.ViewModel
         }
         private int _volumeSlider;
 
-     
+        public ObservableCollection<JsonManager> JsonManagerList
+        {
+            get { return _jsonManagerList; }
+            set
+            {
+                _jsonManagerList = value;
+                OnPropertyChanged();
+            }
+        }
+        private ObservableCollection<JsonManager> _jsonManagerList;
+
+        public JsonManager SelectedJsonManager
+        {
+            get { return _selectedJsonManager; }
+            set
+            {
+                _selectedJsonManager = value;
+                OnPropertyChanged();
+            }
+        }
+        private JsonManager _selectedJsonManager;
+
+
 
         public void UpdateFavButton() 
         {
             BitmapImage bi = new BitmapImage();
             bi.BeginInit();
-            musicFilesManager.LoadPlaylist(FavPlaylistManager);
+            musicFilesManager.LoadPlaylist(FavJsonManager);
             favSongList = musicFilesManager.getCurrentPlaylist();
             var song = musicPlayer.getCurrentSong();
             if (favSongList.Find(p => p.Path == song.Path) != null)
@@ -399,20 +371,20 @@ namespace KCK_GUI.MVVM.ViewModel
         }
         public void SerceBolesne() 
         {
-            musicFilesManager.LoadPlaylist(FavPlaylistManager);
+            musicFilesManager.LoadPlaylist(FavJsonManager);
             favSongList = musicFilesManager.getCurrentPlaylist();
             var song = musicPlayer.getCurrentSong();
             if (favSongList.Find(p => p.Path == song.Path) != null)
             {
 
-                musicFilesManager.DeleteMusicFromPlaylist(song, FavPlaylistManager);
+                musicFilesManager.DeleteMusicFromPlaylist(song, FavJsonManager);
             }
             else
             {
 
-                musicFilesManager.AddMusicToPlaylist(song, FavPlaylistManager);
+                musicFilesManager.AddMusicToPlaylist(song, FavJsonManager);
             }
-            musicFilesManager.LoadPlaylist(FavPlaylistManager);
+            musicFilesManager.LoadPlaylist(FavJsonManager);
             favSongList = musicFilesManager.getCurrentPlaylist();
             UpdateFavButton();
         }
