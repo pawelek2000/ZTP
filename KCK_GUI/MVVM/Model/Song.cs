@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,14 +20,14 @@ namespace KCK_GUI.MVVM.Model
 
     public class SongDataReader
     {
-        public Song ReadData(string FileName)
+        public Song ReadData(string path)
         {
 
-            string[] words = FileName.Split('_');
+            string[] words = Path.GetFileName(path).Split('_');
            
             Song song = new Song
             {
-                Path = FileName,
+                Path = path,
                 Title = words[0],
                 Author = words[1],
                 Category = words[2],

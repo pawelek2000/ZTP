@@ -26,12 +26,15 @@ namespace KCK_GUI.MVVM.ViewModel
         public RelayCommand PlayPrevCommand { get; set; }
         public RelayCommand SerceBolesneCommand { get; set; }
 
-        MusicPlayer Player { get; set; }
+        MusicPlayer musicPlayer { get; set; }
+        MusicFilesManager musicFilesManager { get; set; }
+
+        JsonManager FavPlaylistManager { get; set; }
         public SearchViewModel SearchVM{ get; set; }
         public PlaylistViewModel PlaylistVM { get; set; }
-        public List<MusicFile> favSongList { get; set; }
+        public List<Song> favSongList { get; set; }
+        public List<Song> CurrentSongList { get; set; }
 
-        MusicFilesManager musicFilesManager { get; set; } 
         private BackgroundWorker _bgWorker { get; set; }
 
 
@@ -43,18 +46,20 @@ namespace KCK_GUI.MVVM.ViewModel
             PlayStopImage = new Image();
             FavImage = new Image();
 
+            musicPlayer = MusicPlayer.GetInstance();
             musicFilesManager = MusicFilesManager.GetInstance();
+
+            FavPlaylistManager = new JsonManager("Data/fav.json");
+            musicFilesManager.LoadPlaylist(FavPlaylistManager);
+            favSongList = musicFilesManager.getAllSongsList();
+
             musicFilesManager.LoadAllMusicFiles();
-            var test = musicFilesManager.getCurrentSongList();
+            CurrentSongList = musicFilesManager.getAllSongsList();
+            musicPlayer.setCurrentSong(CurrentSongList[0]);
+            musicPlayer.Open();
 
-
-            Player = MusicPlayer.GetInstance();
-            ConfigClass.musicFiles = MusicFile.GetMusicFiles();
-            ConfigClass.currentSong = ConfigClass.musicFiles[0];
-            Player.Open(ConfigClass.currentSong.MusicPath);
-            ConfigClass.playlistPath = "";
-            ConfigClass.IsCurrentSongChanged = false;
-            favSongList = MusicFile.GetPlaylist("Data/fav.json");
+            //ConfigClass.IsCurrentSongChanged = false;
+            
             VolumeSlider = 50;
 
             BitmapImage bi = new BitmapImage();
@@ -71,7 +76,7 @@ namespace KCK_GUI.MVVM.ViewModel
              {
                  while (true)
                  {
-                     if (Player.IsPlaying)
+                     if (musicPlayer.IsPlaying)
                      {
 
                          Thread.Sleep(100);
@@ -79,9 +84,9 @@ namespace KCK_GUI.MVVM.ViewModel
 
                      }
 
-                     if (Player.IsSongTimeEnd()) 
+                     if (musicPlayer.IsSongTimeEnd()) 
                      {
-                         Player.Stop();
+                         musicPlayer.Stop();
                      }
                    
                  }
@@ -92,7 +97,7 @@ namespace KCK_GUI.MVVM.ViewModel
 
             SearchViewCommand = new RelayCommand(o =>
             {
-                ConfigClass.playlistPath = "";
+                musicPlayer.SwitchIsPlaylsit(false);
                 CurrentView = SearchVM;
 
             });
@@ -168,14 +173,14 @@ namespace KCK_GUI.MVVM.ViewModel
             {
                 bi = new BitmapImage();
                 bi.BeginInit();
-                if (Player.IsPlaying)
+                if (musicPlayer.IsPlaying)
                 {
-                    Player.Pause();
+                    musicPlayer.Pause();
                     bi.UriSource = new Uri(PLAY_IMAGE, UriKind.Relative);
                 }
                 else
                 {
-                    Player.Play();
+                    musicPlayer.Play();
                     bi.UriSource = new Uri(PAUSE_IMAGE, UriKind.Relative);
                 }
                 bi.EndInit();
@@ -283,7 +288,7 @@ namespace KCK_GUI.MVVM.ViewModel
             {
 
                 _volumeSlider = value;
-                Player.SetVolume(_volumeSlider);
+                musicPlayer.SetVolume(_volumeSlider);
                 OnPropertyChanged();
             }
         }
@@ -295,8 +300,10 @@ namespace KCK_GUI.MVVM.ViewModel
         {
             BitmapImage bi = new BitmapImage();
             bi.BeginInit();
-            favSongList = MusicFile.GetPlaylist("Data/fav.json");
-            if (favSongList.Find(p => p.MusicPath == ConfigClass.currentSong.MusicPath) != null)
+            musicFilesManager.LoadPlaylist(FavPlaylistManager);
+            favSongList = musicFilesManager.getCurrentPlaylist();
+            var song = musicPlayer.getCurrentSong();
+            if (favSongList.Find(p => p.Path == song.Path) != null)
             {
                 bi.UriSource = new Uri(FILLED_HEART_IMAGE, UriKind.Relative);
             }
@@ -311,20 +318,21 @@ namespace KCK_GUI.MVVM.ViewModel
         }
         public void UpdateSongInfo() 
         {
-            Title = ConfigClass.currentSong.Title;
-            SongTime = Player.getSongLength();
-            CurrentTime = Player.getCurrentSongTime();
-            MainProgresBar = Player.getCurrentSongTimePercent();
+            var song = musicPlayer.getCurrentSong();
+            Title = song.Title;
+            SongTime = musicPlayer.getSongLength();
+            CurrentTime = musicPlayer.getCurrentSongTime();
+            MainProgresBar = musicPlayer.getCurrentSongTimePercent();
         }
 
         public void PlayNext() 
         {
             ValidatePlaylist();
 
-            if (ConfigClass.musicFiles.Count > ConfigClass.musicFiles.IndexOf(ConfigClass.musicFiles.Find(p => p.MusicPath == ConfigClass.currentSong.MusicPath)) + 1)
-                ConfigClass.currentSong = ConfigClass.musicFiles[(ConfigClass.musicFiles.IndexOf(ConfigClass.musicFiles.Find(p => p.MusicPath == ConfigClass.currentSong.MusicPath)) + 1)];
+            if (CurrentSongList.Count > CurrentSongList.IndexOf(CurrentSongList.Find(p => p.Path == musicPlayer.getCurrentSong().Path)) + 1)
+                musicPlayer.setCurrentSong(CurrentSongList[(CurrentSongList.IndexOf(CurrentSongList.Find(p => p.Path == musicPlayer.getCurrentSong().Path)) + 1)]);
             else
-                ConfigClass.currentSong = ConfigClass.musicFiles[0];
+                musicPlayer.setCurrentSong(CurrentSongList[0]);
 
             PlayNew();
 
@@ -333,76 +341,79 @@ namespace KCK_GUI.MVVM.ViewModel
         {
             ValidatePlaylist();
 
-            if (0 <= ConfigClass.musicFiles.IndexOf(ConfigClass.musicFiles.Find(p => p.MusicPath == ConfigClass.currentSong.MusicPath)) - 1)
-                ConfigClass.currentSong = ConfigClass.musicFiles[(ConfigClass.musicFiles.IndexOf(ConfigClass.musicFiles.Find(p => p.MusicPath == ConfigClass.currentSong.MusicPath))-1)];
+            if (0 <= CurrentSongList.IndexOf(CurrentSongList.Find(p => p.Path == musicPlayer.getCurrentSong().Path)) - 1)
+                musicPlayer.setCurrentSong(CurrentSongList[(CurrentSongList.IndexOf(CurrentSongList.Find(p => p.Path == musicPlayer.getCurrentSong().Path))-1)]);
             else
-                ConfigClass.currentSong = ConfigClass.musicFiles[ConfigClass.musicFiles.Count -1];
+                musicPlayer.setCurrentSong(CurrentSongList[CurrentSongList.Count -1]);
 
             PlayNew();
         }
         public void ValidatePlaylist()
         {
-            if (ConfigClass.playlistPath.Length != 0)
-                ConfigClass.musicFiles = MusicFile.GetPlaylist(ConfigClass.playlistPath);
-
-            if (ConfigClass.playlistPath.Length != 0 && ConfigClass.musicFiles.Count == 0)
-                ConfigClass.musicFiles = MusicFile.GetMusicFiles();
-
+            if (musicPlayer.IsPlaylist)
+                CurrentSongList = musicFilesManager.getCurrentPlaylist();
+            if (CurrentSongList.Count < 2)
+            {
+                CurrentSongList = musicFilesManager.getAllSongsList();
+            }
         }
         public void PlayNew() 
         {
             if (Application.Current.Dispatcher.CheckAccess())
             {
-                Player.Stop();
-                Player.Open(ConfigClass.currentSong.MusicPath);
+                musicPlayer.Stop();
+                musicPlayer.Open();
                 UpdateFavButton();
                 UpdateSongInfo();
-                Player.SetVolume(VolumeSlider * 10);
-                Player.Play();
+                musicPlayer.SetVolume(VolumeSlider);
+                musicPlayer.Play();
                 BitmapImage bi = new BitmapImage();
                 bi.BeginInit();
                 bi.UriSource = new Uri(PAUSE_IMAGE, UriKind.Relative);
                 bi.EndInit();
                 PlayStopImage.Stretch = Stretch.Fill;
                 PlayStopImage.Source = bi;
-                ConfigClass.IsCurrentSongChanged = false;
+                //ConfigClass.IsCurrentSongChanged = false;
             }
-            else
-            {
-                Application.Current.Dispatcher.BeginInvoke(
-                     DispatcherPriority.Background,
-                    new Action(() => {
-                        Player.Stop();
-                        Player.Open(ConfigClass.currentSong.MusicPath);
-                        UpdateFavButton();
-                        UpdateSongInfo();
-                        Player.SetVolume(VolumeSlider * 10);
-                        Player.Play();
-                        BitmapImage bi = new BitmapImage();
-                        bi.BeginInit();
-                        bi.UriSource = new Uri(PAUSE_IMAGE, UriKind.Relative);
-                        bi.EndInit();
-                        PlayStopImage.Stretch = Stretch.Fill;
-                        PlayStopImage.Source = bi;
-                        ConfigClass.IsCurrentSongChanged = false;
-                    }));
-            }
+            //else
+            //{
+            //    Application.Current.Dispatcher.BeginInvoke(
+            //         DispatcherPriority.Background,
+            //        new Action(() => {
+            //            musicPlayer.Stop();
+            //            musicPlayer.Open();
+            //            UpdateFavButton();
+            //            UpdateSongInfo();
+            //            musicPlayer.SetVolume(VolumeSlider);
+            //            musicPlayer.Play();
+            //            BitmapImage bi = new BitmapImage();
+            //            bi.BeginInit();
+            //            bi.UriSource = new Uri(PAUSE_IMAGE, UriKind.Relative);
+            //            bi.EndInit();
+            //            PlayStopImage.Stretch = Stretch.Fill;
+            //            PlayStopImage.Source = bi;
+            //            //ConfigClass.IsCurrentSongChanged = false;
+            //        }));
+            //}
 
         }
         public void SerceBolesne() 
         {
-            favSongList = MusicFile.GetPlaylist("Data/fav.json");
-            if (favSongList.Find(p => p.MusicPath == ConfigClass.currentSong.MusicPath) != null)
+            musicFilesManager.LoadPlaylist(FavPlaylistManager);
+            favSongList = musicFilesManager.getCurrentPlaylist();
+            var song = musicPlayer.getCurrentSong();
+            if (favSongList.Find(p => p.Path == song.Path) != null)
             {
-                
-                MusicFile.DeleteMusic(ConfigClass.currentSong, "Data/fav.json");
+
+                musicFilesManager.DeleteMusicFromPlaylist(song, FavPlaylistManager);
             }
             else
             {
-                
-                MusicFile.AddMusic(ConfigClass.currentSong, "Data/fav.json");
+
+                musicFilesManager.AddMusicToPlaylist(song, FavPlaylistManager);
             }
-            favSongList = MusicFile.GetPlaylist("Data/fav.json");
+            musicFilesManager.LoadPlaylist(FavPlaylistManager);
+            favSongList = musicFilesManager.getCurrentPlaylist();
             UpdateFavButton();
         }
       

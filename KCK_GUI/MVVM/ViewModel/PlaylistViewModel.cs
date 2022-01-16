@@ -122,7 +122,7 @@ namespace KCK_GUI.MVVM.ViewModel
         {
             ConfigClass.currentSong = file;
             Player.Stop();
-            Player.Open(ConfigClass.currentSong.MusicPath);
+            Player.Open();
             Player.Play();
         }
         public void DeleteFormPlaylist(MusicFile file) 

@@ -17,6 +17,7 @@ namespace KCK_GUI.MVVM.Model
             Volume = 50;
             SongLength = 0;
             MusicPlayerStopwatch = new Stopwatch();
+            IsPlaylist = false;
         }
 
         private static MusicPlayer _instance;
@@ -33,12 +34,30 @@ namespace KCK_GUI.MVVM.Model
         [DllImport("winmm.dll")]
         private static extern long mciSendString(string lpstrCommand, StringBuilder lpstrReturnString, int uReturnLength, int hwndCallback);
         public bool IsPlaying { get; set; }
+        public bool IsPlaylist { get; set; }
         private static int Volume { get; set; }
         private static double SongLength { get; set; }
         private static Stopwatch MusicPlayerStopwatch { get; set; }
+        private static Song CurrentSong { get; set; }
 
-        public void Open(string file)
+        public void setCurrentSong(Song song)
         {
+            CurrentSong = song;
+        }
+
+        public Song getCurrentSong()
+        {
+            return CurrentSong;
+        }
+        public void SwitchIsPlaylsit(bool isplaylist) 
+        {
+            
+                IsPlaylist = isplaylist;
+            
+        }
+        public void Open()
+        {
+            string file = CurrentSong.Path;
             string command = "open \"" + file + "\" type MPEGVideo alias MyMp3";
             mciSendString(command, null, 0, 0);
             UpdateSongLength();

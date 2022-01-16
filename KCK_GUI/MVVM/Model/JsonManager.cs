@@ -26,7 +26,7 @@ namespace KCK_GUI.MVVM
 
         public bool IsFileExisting()
         {
-            if (new FileInfo("").Length > 8)
+            if (new FileInfo(Path).Length > 8)
                 return true;
             else
                 return false;

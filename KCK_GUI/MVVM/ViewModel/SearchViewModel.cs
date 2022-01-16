@@ -95,7 +95,7 @@ namespace KCK_GUI.MVVM.ViewModel
         {
             ConfigClass.currentSong = ConfigClass.musicFiles.Find(p => p.Title == Title);
             Player.Stop();
-            Player.Open(ConfigClass.currentSong.MusicPath);
+            Player.Open();
             Player.Play();
 
             

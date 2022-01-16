@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Newtonsoft.Json;
 
 namespace KCK_GUI.MVVM.Model
@@ -25,15 +26,21 @@ namespace KCK_GUI.MVVM.Model
         }
 
         //Logika
-        private static List<Song> CurrentSongList { get; set; }
-        public List<Song> getCurrentSongList() 
+        private static List<Song> AllSongsList { get; set; }
+        private static List<Song> CurrentPlaylist { get; set; }
+        public List<Song> getAllSongsList() 
         {
-            return CurrentSongList;
+            return AllSongsList;
+        }
+
+        public List<Song> getCurrentPlaylist()
+        {
+            return CurrentPlaylist;
         }
         public void LoadAllMusicFiles()
         {
             
-            CurrentSongList = new List<Song>();
+            AllSongsList = new List<Song>();
             string path = ConfigurationManager.AppSettings["MusicFilesDirectory"];
             ProcessDirectory(path);
 
@@ -54,27 +61,28 @@ namespace KCK_GUI.MVVM.Model
         private void ProcessFile(string path)
         {
             SongDataReader songDataReader = new SongDataReader();
-            CurrentSongList.Add(songDataReader.ReadData(Path.GetFileName(path)));
+            AllSongsList.Add(songDataReader.ReadData(path));
         }
         //Pobieranie playlisty
         public void LoadPlaylist(JsonManager jsonManager)
         {
             LoadAllMusicFiles();
-            List<Song> tempSongList = CurrentSongList;
             List<Song> playList = new List<Song>();
             if (jsonManager.IsFileExisting())
             {
                 playList = JsonConvert.DeserializeObject<List<Song>>(jsonManager.getJsonFile());
+                CurrentPlaylist = JsonConvert.DeserializeObject<List<Song>>(jsonManager.getJsonFile());
+
             }
             foreach (var song in playList) 
             {
-                if (!tempSongList.Contains(song)) 
+                if (!AllSongsList.Contains(song)) 
                 {
-                    playList.Remove(song);
+                    CurrentPlaylist.Remove(song);
                 }
                 
             }
-            CurrentSongList = playList;
+            CurrentPlaylist = playList;
         }
 
         public void AddMusicToPlaylist(Song song, JsonManager jsonManager)
@@ -93,7 +101,7 @@ namespace KCK_GUI.MVVM.Model
             }
         }
 
-        public static void DeleteMusicFromPlaylist(Song song, JsonManager jsonManager)
+        public void DeleteMusicFromPlaylist(Song song, JsonManager jsonManager)
         {
             List<Song> playList = new List<Song>();
             if (jsonManager.IsFileExisting())
@@ -107,6 +115,35 @@ namespace KCK_GUI.MVVM.Model
                 string jsonString = JsonConvert.SerializeObject(playList);
                 jsonManager.writeJson(jsonString);
             }
+        }
+
+        public string ChooseMusicFileToAdd()
+        {
+            var musicFilesPath = @"c:\Users\Dom\Music"; // string path = ConfigurationManager.AppSettings["MusicFilesDirectory"]
+            var filePath = string.Empty;
+
+            OpenFileDialog openFileDialog = new OpenFileDialog();
+
+            openFileDialog.InitialDirectory = musicFilesPath;
+            openFileDialog.Filter = "Pliki dźwiękowe (*.mp3; *.wav)| *.mp3; *.wav| Wszystkie pliki (*.*)| *.*";
+            openFileDialog.FilterIndex = 1;
+            openFileDialog.RestoreDirectory = true;
+
+            if (openFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                //Get the path of specified file
+                filePath = openFileDialog.FileName;
+                
+            }
+            return filePath;
+        }
+        public static void AddMusicFile(string title, string author, string category, int length, int year, int idNumber ,string filePath) 
+        {
+            var destinationMusicFilesDirectory = ConfigurationManager.AppSettings["MusicFilesDirectory"];     // Tu albo tu lol
+            var finalPath = string.Empty;
+            finalPath = destinationMusicFilesDirectory + title + "_" + author + "_" + category + "_" + length + "_" + year + "_" + idNumber + "_.mp3";
+
+            File.Copy(filePath, finalPath);
         }
     }
 }
