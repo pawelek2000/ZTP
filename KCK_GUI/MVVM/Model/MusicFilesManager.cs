@@ -137,11 +137,11 @@ namespace KCK_GUI.MVVM.Model
             }
             return filePath;
         }
-        public static void AddMusicFile(string title, string author, string category, int length, int year, int idNumber ,string filePath) 
+        public void AddMusicFile(string title, string author, string category, double length, int year, int idNumber ,string filePath) 
         {
             var destinationMusicFilesDirectory = ConfigurationManager.AppSettings["MusicFilesDirectory"];     // Tu albo tu lol
             var finalPath = string.Empty;
-            finalPath = destinationMusicFilesDirectory + title + "_" + author + "_" + category + "_" + length + "_" + year + "_" + idNumber + "_.mp3";
+            finalPath = destinationMusicFilesDirectory +"\\"+ title + "_" + author + "_" + category + "_" + length + "_" + year + "_" + idNumber + "_.mp3";
 
             File.Copy(filePath, finalPath);
         }

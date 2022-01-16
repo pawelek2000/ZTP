@@ -13,30 +13,17 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-
-namespace KCK_GUI
+namespace KCK_GUI.MVVM.View
 {
     /// <summary>
-    /// Logika interakcji dla klasy MainWindow.xaml
+    /// Logika interakcji dla klasy AddFileView.xaml
     /// </summary>
-    public partial class MainWindow : Window
+    public partial class AddFileView : UserControl
     {
-        
-        public MainWindow()
+        public AddFileView()
         {
             InitializeComponent();
         }
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ChangedButton == MouseButton.Left)
-                this.DragMove();
-        }
-        private void CloseWindowButton_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown();
-        }
-
-      
 
        
     }

@@ -90,6 +90,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="MVVM\View\AddFileView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\PlaylistView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -121,14 +125,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MVVM\Model\JsonManager.cs" />
-    <Compile Include="MVVM\Model\ConfigClass.cs" />
-    <Compile Include="MVVM\Model\MusicFile.cs" />
     <Compile Include="MVVM\Model\MusicFilesManager.cs" />
     <Compile Include="MVVM\Model\MusicPlayer.cs" />
     <Compile Include="MVVM\Model\Song.cs" />
+    <Compile Include="MVVM\ViewModel\AddFileViewModel.cs" />
     <Compile Include="MVVM\ViewModel\MainViewModel.cs" />
     <Compile Include="MVVM\ViewModel\PlaylistViewModel.cs" />
     <Compile Include="MVVM\ViewModel\SearchViewModel.cs" />
+    <Compile Include="MVVM\View\AddFileView.xaml.cs">
+      <DependentUpon>AddFileView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MVVM\View\PlaylistView.xaml.cs">
       <DependentUpon>PlaylistView.xaml</DependentUpon>
     </Compile>
@@ -195,6 +201,9 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Images\add_music_button.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -139,7 +139,10 @@ namespace KCK_GUI.MVVM.Model
             else
                 return false;
         }
-
+        public double getSongLengthInMilliseconds() 
+        {
+            return SongLength;
+        }
         //Private
         private void UpdateSongLength()
         {

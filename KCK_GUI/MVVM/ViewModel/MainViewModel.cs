@@ -26,6 +26,7 @@ namespace KCK_GUI.MVVM.ViewModel
         public RelayCommand PlayNextCommand { get; set; }
         public RelayCommand PlayPrevCommand { get; set; }
         public RelayCommand SerceBolesneCommand { get; set; }
+        public RelayCommand AddViewCommand { get; set; }
 
         MusicPlayer musicPlayer { get; set; }
         MusicFilesManager musicFilesManager { get; set; }
@@ -33,6 +34,7 @@ namespace KCK_GUI.MVVM.ViewModel
         JsonManager FavJsonManager { get; set; }
         public SearchViewModel SearchVM{ get; set; }
         public PlaylistViewModel PlaylistVM { get; set; }
+        public AddFileViewModel AddFileVM { get; set; }
         public List<Song> favSongList { get; set; }
         public List<Song> CurrentSongList { get; set; }
 
@@ -106,10 +108,17 @@ namespace KCK_GUI.MVVM.ViewModel
             SearchViewCommand = new RelayCommand(o =>
             {
                 musicPlayer.SwitchIsPlaylsit(false);
+                musicFilesManager.LoadAllMusicFiles();
+                CurrentSongList = musicFilesManager.getAllSongsList();
                 CurrentView = SearchVM;
 
             });
 
+            AddViewCommand = new RelayCommand(o =>
+            {
+                AddFileVM = new AddFileViewModel();
+                CurrentView = AddFileVM;
+            });
             PlatlistViewCommand = new RelayCommand(o =>
             {
                 SelectedJsonManager = (o as JsonManager);

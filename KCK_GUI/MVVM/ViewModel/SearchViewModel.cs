@@ -18,13 +18,16 @@ namespace KCK_GUI.MVVM.ViewModel
 
         public RelayCommand SearchBoxCommand { get; set; }
         public RelayCommand PlayFormSearchCommand { get; set; }
-        public List<MusicFile>  TempList { get; set; }
-        MusicPlayer Player { get; set; }
+        public List<Song>  TempList { get; set; }
+        MusicPlayer musicPlayer { get; set; }
+        MusicFilesManager musicFilesManager { get; set; }
+
 
         public SearchViewModel()
         {
-            ConfigClass.musicFiles = MusicFile.GetMusicFiles();
-            Player = MusicPlayer.GetInstance();
+            
+            musicPlayer = MusicPlayer.GetInstance();
+            musicFilesManager = MusicFilesManager.GetInstance();
             TestText = new ObservableCollection<string>();
             Visibilities = new ObservableCollection<Visibility>();
 
@@ -49,7 +52,7 @@ namespace KCK_GUI.MVVM.ViewModel
                 _searchText = value;
                 
 
-                TempList = ConfigClass.musicFiles.Where(p => p.Title.ToLower().Contains(_searchText.ToLower())).ToList();
+                TempList = musicFilesManager.getAllSongsList().Where(p => p.Title.ToLower().Contains(_searchText.ToLower())).ToList();
                 for (int i = 0; i < 10; i++)
                 {
                     if (TempList.Count > 0 && _searchText.Length > 0 && i < TempList.Count)
@@ -93,10 +96,11 @@ namespace KCK_GUI.MVVM.ViewModel
 
         public void PlayFromSearch(string Title)
         {
-            ConfigClass.currentSong = ConfigClass.musicFiles.Find(p => p.Title == Title);
-            Player.Stop();
-            Player.Open();
-            Player.Play();
+            musicFilesManager.LoadAllMusicFiles();
+            musicPlayer.setCurrentSong(musicFilesManager.getAllSongsList().Find(p => p.Title == Title));
+            musicPlayer.Stop();
+            musicPlayer.Open();
+            musicPlayer.Play();
 
             
         }

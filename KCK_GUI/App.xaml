@@ -23,7 +23,11 @@
             <DataTemplate DataType="{x:Type viewModel:PlaylistViewModel}">
                 <view:PlaylistView/>
             </DataTemplate>
-            
+
+            <DataTemplate DataType="{x:Type viewModel:AddFileViewModel}">
+                <view:AddFileView/>
+            </DataTemplate>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>
