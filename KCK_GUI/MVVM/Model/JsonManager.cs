@@ -23,6 +23,14 @@ namespace KCK_GUI.MVVM
         {
             File.WriteAllText(Path, JsonFile);
         }
+
+        public bool IsFileExisting()
+        {
+            if (new FileInfo("").Length > 8)
+                return true;
+            else
+                return false;
+        }
        
     }
 }

@@ -9,6 +9,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using KCK_GUI.Core;
 using KCK_GUI.MVVM.Model;
+using Microsoft.Win32;
 
 namespace KCK_GUI.MVVM.ViewModel
 {
@@ -43,8 +44,8 @@ namespace KCK_GUI.MVVM.ViewModel
             FavImage = new Image();
 
             musicFilesManager = MusicFilesManager.GetInstance();
-            musicFilesManager.GetMusicFiles();
-            Song test = musicFilesManager.GetNextSong();
+            musicFilesManager.LoadAllMusicFiles();
+            var test = musicFilesManager.getCurrentSongList();
 
 
             Player = MusicPlayer.GetInstance();

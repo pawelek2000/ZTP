@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Newtonsoft.Json;
 
 namespace KCK_GUI.MVVM.Model
 {
@@ -24,20 +25,20 @@ namespace KCK_GUI.MVVM.Model
         }
 
         //Logika
-        private List<Song> CurrentSongList { get; set; }
-        private int SongIndex { get; set; }
-        public void GetMusicFiles()
+        private static List<Song> CurrentSongList { get; set; }
+        public List<Song> getCurrentSongList() 
         {
-            SongIndex = 0;
+            return CurrentSongList;
+        }
+        public void LoadAllMusicFiles()
+        {
+            
             CurrentSongList = new List<Song>();
             string path = ConfigurationManager.AppSettings["MusicFilesDirectory"];
             ProcessDirectory(path);
 
         }
-        public Song GetNextSong()
-        {
-            return CurrentSongList[SongIndex];
-        }
+       
          private void ProcessDirectory(string targetDirectory)
         {
             // Process the list of files found in the directory.
@@ -50,12 +51,62 @@ namespace KCK_GUI.MVVM.Model
             foreach (string subdirectory in subdirectoryEntries)
                 ProcessDirectory(subdirectory);
         }
-        private  void ProcessFile(string path)
+        private void ProcessFile(string path)
         {
             SongDataReader songDataReader = new SongDataReader();
             CurrentSongList.Add(songDataReader.ReadData(Path.GetFileName(path)));
         }
+        //Pobieranie playlisty
+        public void LoadPlaylist(JsonManager jsonManager)
+        {
+            LoadAllMusicFiles();
+            List<Song> tempSongList = CurrentSongList;
+            List<Song> playList = new List<Song>();
+            if (jsonManager.IsFileExisting())
+            {
+                playList = JsonConvert.DeserializeObject<List<Song>>(jsonManager.getJsonFile());
+            }
+            foreach (var song in playList) 
+            {
+                if (!tempSongList.Contains(song)) 
+                {
+                    playList.Remove(song);
+                }
+                
+            }
+            CurrentSongList = playList;
+        }
 
+        public void AddMusicToPlaylist(Song song, JsonManager jsonManager)
+        {
+            List<Song> playList = new List<Song>();
+            if (jsonManager.IsFileExisting())
+            {
+                playList = JsonConvert.DeserializeObject<List<Song>>(jsonManager.getJsonFile());
+            }
 
+            if (!playList.Contains(playList.Find(p => p.Path == song.Path)))
+            {
+                playList.Add(song);
+                string jsonString = JsonConvert.SerializeObject(playList);
+                jsonManager.writeJson(jsonString);
+            }
+        }
+
+        public static void DeleteMusicFromPlaylist(Song song, JsonManager jsonManager)
+        {
+            List<Song> playList = new List<Song>();
+            if (jsonManager.IsFileExisting())
+            {
+                playList = JsonConvert.DeserializeObject<List<Song>>(jsonManager.getJsonFile());
+            }
+            
+            if (playList.Contains(playList.Find(p => p.Path == song.Path)))
+            {
+                playList.Remove(playList.Find(p => p.Path == song.Path));
+                string jsonString = JsonConvert.SerializeObject(playList);
+                jsonManager.writeJson(jsonString);
+            }
+        }
     }
 }
