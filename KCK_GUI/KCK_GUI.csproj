@@ -124,6 +124,7 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MVVM\Model\FormatAdapter.cs" />
     <Compile Include="MVVM\Model\JsonManager.cs" />
     <Compile Include="MVVM\Model\MusicFilesManager.cs" />
     <Compile Include="MVVM\Model\MusicPlayer.cs" />
