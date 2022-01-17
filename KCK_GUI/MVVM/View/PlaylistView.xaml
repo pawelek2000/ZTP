@@ -38,19 +38,67 @@
 	                Grid.ColumnSpan="3">
             <ListBox.ItemTemplate>
                 <DataTemplate>
-                    <TextBlock Padding="0" 
-                        Margin="0" 
-                        Text="{Binding Title}" 
-                        Width="{Binding ElementName=listBox, Path=Width}">
-                        <TextBlock.InputBindings>
+                    <Grid Height="70"
+                          Width="500">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        
+                        <TextBlock Text="{Binding Title}"
+                                   Padding="5"
+                                   FontSize="20"
+                                   Grid.ColumnSpan="4">
+                            
+                        </TextBlock>
+                        
+                        <TextBlock Text="{Binding Author}"
+                                   Padding="5"
+                                   FontSize="15"
+                                   Grid.Row="1"
+                                   Foreground="#FFC4D1">
+                        </TextBlock>
+
+                        <TextBlock Text="{Binding Year}"
+                                   Padding="5"
+                                   FontSize="15"
+                                   Grid.Column="1"
+                                   Grid.Row="1"
+                                   Foreground="#FFC4D1">
+                        </TextBlock>
+
+                        <TextBlock Text="{Binding Category}"
+                                   Padding="5"
+                                   FontSize="15"
+                                   Grid.Column="2"
+                                   Grid.Row="1"
+                                   Foreground="#FFC4D1">
+                        </TextBlock>
+
+                        <TextBlock Text="{Binding Time}"
+                                   Padding="5"
+                                   FontSize="12"
+                                   Grid.Column="3"
+                                   Grid.RowSpan="2"
+                                   Foreground="#FFC4D1"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Center">
+                        </TextBlock>
+                        <Grid.InputBindings>
                             <MouseBinding 
                                     Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext.PlayFormPlaylistCommand}"       
                                     Gesture="LeftDoubleClick"/>
                             <MouseBinding 
                                     Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext.DeleteFromPlaylistCommand}"       
                                     Gesture="RightDoubleClick"/>
-                        </TextBlock.InputBindings>
-                    </TextBlock>
+                        </Grid.InputBindings>
+                    </Grid>
                 </DataTemplate>
             </ListBox.ItemTemplate>
         </ListBox>
