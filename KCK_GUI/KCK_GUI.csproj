@@ -128,6 +128,7 @@
     <Compile Include="MVVM\Model\MusicFilesManager.cs" />
     <Compile Include="MVVM\Model\MusicPlayer.cs" />
     <Compile Include="MVVM\Model\Song.cs" />
+    <Compile Include="MVVM\Model\XmlManager.cs" />
     <Compile Include="MVVM\ViewModel\AddFileViewModel.cs" />
     <Compile Include="MVVM\ViewModel\MainViewModel.cs" />
     <Compile Include="MVVM\ViewModel\PlaylistViewModel.cs" />
