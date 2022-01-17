@@ -4,12 +4,14 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace KCK_GUI.MVVM.Model
 {
     class XmlManager
     {
-        private string Path;
+        private string Path { get; set; }
+        XmlDocument xmlDocument { get; set; }
         public XmlManager(string path)
         {
             Path = path;
@@ -20,9 +22,11 @@ namespace KCK_GUI.MVVM.Model
             return File.ReadAllText(Path);
         }
 
-        public void writeXml(string XmlFile)
+        public void writeXml(XmlDocument XmlFile)
         {
-            File.WriteAllText(Path, XmlFile);
+            xmlDocument = new XmlDocument();
+            xmlDocument.Load(XmlFile);
+            xmlDocument.Save(Path);
         }
 
         public bool isFileExisting()

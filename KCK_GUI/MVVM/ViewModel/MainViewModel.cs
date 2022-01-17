@@ -53,7 +53,12 @@ namespace KCK_GUI.MVVM.ViewModel
             musicFilesManager = MusicFilesManager.GetInstance();
 
             JsonManagerList = new ObservableCollection<JsonManager>();
-            FavJsonManager = new JsonManager("Data/fav.json" , "Ulubione");
+            FavJsonManager = new JsonManager
+            {
+                Name = "Ulubione",
+                Path = "Data/fav.json"
+            };
+            
             JsonManagerList.Add(FavJsonManager);
             musicFilesManager.LoadPlaylist(FavJsonManager);
             favSongList = musicFilesManager.getAllSongsList();
@@ -67,7 +72,7 @@ namespace KCK_GUI.MVVM.ViewModel
 
             for (int i = 1; i < 10; i++) 
             {
-                JsonManagerList.Add(new JsonManager("Data/p"+i+".json" , "Playlist " + i));
+                JsonManagerList.Add(new JsonManager { Path= "Data/p" + i + ".json", Name = "Playlist " + i });
             }
             
             VolumeSlider = 50;

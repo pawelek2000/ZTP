@@ -1,6 +1,7 @@
 ﻿using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -8,20 +9,18 @@ using System.Xml;
 
 namespace KCK_GUI.MVVM.Model
 {
-    class FormatAdapter
+    class FormatAdapter : JsonManager
     {
-        private string Path;
-        public FormatAdapter(string path)
+        private  XmlManager xmlManager { get; set; }
+
+        public FormatAdapter()
         {
-            Path = path;
+            xmlManager = new XmlManager(Path);
         }
-
-        public string convertXmlToJson()
+        public string getJsonFile()
         {
-
-            //String xmlPath = @"C:\Users\Dom\Desktop\json\p2.xml";
-            XmlManager XMLManager = new XmlManager(Path);
-            var xmlTekst = XMLManager.getXmlFile();
+            
+            string xmlTekst = xmlManager.getXmlFile();
 
             XmlDocument doc = new XmlDocument();
             doc.LoadXml(xmlTekst);
@@ -30,5 +29,18 @@ namespace KCK_GUI.MVVM.Model
             return json;
         }
 
+        public void writeJson(string JsonFile)
+        {
+            XmlDocument doc = JsonConvert.DeserializeXmlNode(JsonFile);
+            xmlManager.writeXml(doc);
+        }
+
+        public bool IsFileExisting()
+        {
+            if (new FileInfo(Path).Length > 8)
+                return true;
+            else
+                return false;
+        }
     }
 }
