@@ -133,7 +133,6 @@ namespace KCK_GUI.MVVM.Model
             {
                 //Get the path of specified file
                 filePath = openFileDialog.FileName;
-                
             }
             return filePath;
         }
@@ -145,5 +144,10 @@ namespace KCK_GUI.MVVM.Model
 
             File.Move(filePath, finalPath);
         }
+        public void DeleteMusicFile(string filePath)
+        {
+            File.Delete(filePath);
+        }
+
     }
 }
