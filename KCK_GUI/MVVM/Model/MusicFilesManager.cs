@@ -143,7 +143,7 @@ namespace KCK_GUI.MVVM.Model
             var finalPath = string.Empty;
             finalPath = destinationMusicFilesDirectory +"\\"+ title + "_" + author + "_" + category + "_" + length + "_" + year + "_" + idNumber + "_.mp3";
 
-            File.Copy(filePath, finalPath);
+            File.Move(filePath, finalPath);
         }
     }
 }
