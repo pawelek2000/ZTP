@@ -29,10 +29,10 @@ namespace KCK_GUI.MVVM.Model
             return json;
         }
 
-        public void writeJson(string JsonFile)
+        public void writeJson(string JsonFile, string savePath)
         {
             XmlDocument doc = JsonConvert.DeserializeXmlNode(JsonFile);
-            xmlManager.writeXml(doc);
+            xmlManager.writeXml(JsonFile, savePath);
         }
 
         public bool IsFileExisting()
