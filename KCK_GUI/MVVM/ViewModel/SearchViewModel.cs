@@ -28,20 +28,13 @@ namespace KCK_GUI.MVVM.ViewModel
             
             musicPlayer = MusicPlayer.GetInstance();
             musicFilesManager = MusicFilesManager.GetInstance();
-            TestText = new ObservableCollection<string>();
-            Visibilities = new ObservableCollection<Visibility>();
+            TestText = new ObservableCollection<Song>();
 
-            for (int i = 0; i < 10; i++) 
-            {
-                TestText.Add("");
-                Visibilities.Add(Visibility.Hidden);
-            }
             PlayFormSearchCommand = new RelayCommand(o =>
             {
-                var button = (o as RadioButton);
-                PlayFromSearch(button.Content.ToString());
-
+                PlayFromSearch(SelectedMusicFile);
             });
+
         }
 
         public string SearchText
@@ -50,21 +43,16 @@ namespace KCK_GUI.MVVM.ViewModel
             set
             {
                 _searchText = value;
-                
 
+                TestText.Clear();
                 TempList = musicFilesManager.getAllSongsList().Where(p => p.Title.ToLower().Contains(_searchText.ToLower())).ToList();
                 for (int i = 0; i < 10; i++)
                 {
                     if (TempList.Count > 0 && _searchText.Length > 0 && i < TempList.Count)
                     {
-                        TestText[i] = TempList[i].Title;
-                        Visibilities[i] = Visibility.Visible;
+                        TestText.Add(TempList[i]);
                     }
-                    else
-                    {
-                        TestText[i] = "";
-                        Visibilities[i] = Visibility.Hidden;
-                    }
+                   
                 }
                 OnPropertyChanged();
             }
@@ -73,7 +61,7 @@ namespace KCK_GUI.MVVM.ViewModel
 
         private string _searchText;
 
-        public ObservableCollection<string> TestText
+        public ObservableCollection<Song> TestText
         {
             get { return _testText; }
             set
@@ -82,22 +70,22 @@ namespace KCK_GUI.MVVM.ViewModel
                 OnPropertyChanged();
             }
         }
-        private ObservableCollection<string> _testText;
-        public ObservableCollection<Visibility> Visibilities
+        private ObservableCollection<Song> _testText;
+
+        public Song SelectedMusicFile
         {
-            get { return _visibilities; }
+            get { return _selectedMusicFile; }
             set
             {
-                _visibilities = value;
+                _selectedMusicFile = value;
                 OnPropertyChanged();
             }
         }
-        private ObservableCollection<Visibility> _visibilities;
-
-        public void PlayFromSearch(string Title)
+        private Song _selectedMusicFile;
+        public void PlayFromSearch(Song song)
         {
             musicFilesManager.LoadAllMusicFiles();
-            musicPlayer.setCurrentSong(musicFilesManager.getAllSongsList().Find(p => p.Title == Title));
+            musicPlayer.setCurrentSong(song);
             musicPlayer.Stop();
             musicPlayer.Open();
             musicPlayer.Play();

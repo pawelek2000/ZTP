@@ -25,16 +25,24 @@ namespace KCK_GUI.MVVM.ViewModel
             FindFileCommand = new RelayCommand(o => 
             {
                 FilePath = musicFilesManager.ChooseMusicFileToAdd();
+                musicPlayer.Stop();
+                musicPlayer.setCurrentSong(new Song { Path = FilePath });
+                musicPlayer.Open();
+                musicPlayer.Play();
             });
 
             AddFileCommand = new RelayCommand(o =>
             {
                 if (FilePath != null && Title != null && !Title.Contains('_') && Author != null && !Author.Contains('_') && Category != null && !Category.Contains('_') && Year > 1500 && Year < 2023)
                 {
+                    
+                    var test = musicPlayer.getCurrentSong();
                     double length = musicPlayer.getSongLengthInMilliseconds();
                     Random random = new Random();
                     int randomNumber = random.Next();
                     musicFilesManager.AddMusicFile(Title, Author, Category, length, Year, randomNumber, FilePath);
+                    musicPlayer.setCurrentSong(musicFilesManager.getAllSongsList()[0]);
+                    musicPlayer.Stop();
                 }
                 else
                     MessageBox.Show("Źle");
