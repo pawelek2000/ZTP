@@ -32,7 +32,7 @@ namespace KCK_GUI.MVVM.Model
         public void writeJson(string JsonFile)
         {
             XmlDocument doc = JsonConvert.DeserializeXmlNode(JsonFile);
-            xmlManager.writeXml(doc);
+            //xmlManager.writeXml(doc);
         }
 
         public bool IsFileExisting()

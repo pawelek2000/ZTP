@@ -16,17 +16,24 @@ namespace KCK_GUI.MVVM.ViewModel
         public RelayCommand PlayFormPlaylistCommand { get; set; }
         public RelayCommand DeleteFromPlaylistCommand { get; set; }
         public RelayCommand AddToPlaylistCommand { get; set; }
+        public RelayCommand SortByTitleCommand { get; set; }
+        public RelayCommand SortByYearCommand { get; set; }
+        public RelayCommand SortByDurationCommand { get; set; }
         public List<Song> TempList { get; set; }
         MusicPlayer musicPlayer { get; set; }
         MusicFilesManager musicFilesManager { get; set; }
         public JsonManager CurrentJsonFile { get; set; }
+        public bool TitleSort { get; set; }
+        public bool YearSort { get; set; }
+        public bool DurationSort { get; set; }
         public PlaylistViewModel()
         {
             musicPlayer = MusicPlayer.GetInstance();
             musicFilesManager = MusicFilesManager.GetInstance();
             CurrentSongList = new ObservableCollection<Song>();
-            
-            
+            TitleSort = false;
+            YearSort = false;
+            DurationSort = false;
             TestText = new ObservableCollection<string>();
             Visibilities = new ObservableCollection<Visibility>();
 
@@ -35,7 +42,18 @@ namespace KCK_GUI.MVVM.ViewModel
                 TestText.Add("");
                 Visibilities.Add(Visibility.Hidden);
             }
-
+            SortByTitleCommand = new RelayCommand(o=> 
+            {
+                CurrentSongList = SortByTitle(CurrentSongList);
+            });
+            SortByYearCommand = new RelayCommand(o =>
+            {
+                CurrentSongList = SortByYear(CurrentSongList);
+            });
+            SortByDurationCommand = new RelayCommand(o =>
+            {
+                CurrentSongList = SortByDuration(CurrentSongList);
+            });
             PlayFormPlaylistCommand = new RelayCommand(o =>
             {
                 PlayFromPlaylist(SelectedMusicFile);
@@ -165,6 +183,60 @@ namespace KCK_GUI.MVVM.ViewModel
             if(CurrentJsonFile!=null)
             musicFilesManager.LoadPlaylist(CurrentJsonFile);
             musicFilesManager.getCurrentPlaylist().ForEach(CurrentSongList.Add);
+        }
+        public ObservableCollection<Song> SortByYear(ObservableCollection<Song> Songs)
+        {
+            if (YearSort)
+            {
+                TitleSort = false;
+                YearSort = false;
+                DurationSort = false;
+                return Songs = new ObservableCollection<Song>(Songs.Reverse());
+            }
+            else
+            {
+                TitleSort = false;
+                YearSort = true;
+                DurationSort = false;
+                return Songs = new ObservableCollection<Song>(Songs.OrderBy(p => p.Year));
+            }
+        }
+        public ObservableCollection<Song> SortByDuration(ObservableCollection<Song> Songs)
+        {
+
+            if (DurationSort)
+            {
+                TitleSort = false;
+                YearSort = false;
+                DurationSort = false;
+                return Songs = new ObservableCollection<Song>(Songs.Reverse());
+            }
+            else
+            {
+                TitleSort = false;
+                YearSort = false;
+                DurationSort = true;
+                return Songs = new ObservableCollection<Song>(Songs.OrderBy(p => p.Length));
+            }
+            
+        }
+
+        public ObservableCollection<Song> SortByTitle(ObservableCollection<Song> Songs)
+        {
+            if (TitleSort)
+            {
+                TitleSort = false;
+                YearSort = false;
+                DurationSort = false;
+                return Songs = new ObservableCollection<Song>(Songs.Reverse());
+            }
+            else
+            {
+                TitleSort = true;
+                YearSort = false;
+                DurationSort = false;
+                return Songs = new ObservableCollection<Song>(Songs.OrderBy(p => p.Length));
+            }
         }
     }
 }
