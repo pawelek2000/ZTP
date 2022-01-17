@@ -22,11 +22,11 @@ namespace KCK_GUI.MVVM.Model
             return File.ReadAllText(Path);
         }
 
-        public void writeXml(List<Song> XmlFile)
+        public void writeXml(string XmlFile, string savePath)
         {
             xmlDocument = new XmlDocument();
-            //xmlDocument.LoadXml(XmlFile);
-            xmlDocument.Save(Path);
+            xmlDocument.LoadXml(XmlFile);
+            xmlDocument.Save(savePath);
         }
 
         public bool isFileExisting()
