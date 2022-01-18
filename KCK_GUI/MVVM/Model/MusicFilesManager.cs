@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -123,7 +124,7 @@ namespace KCK_GUI.MVVM.Model
 
         public string ChooseMusicFileToAdd()
         {
-            var musicFilesPath = @"c:\Users\Dom\Music"; // string path = ConfigurationManager.AppSettings["MusicFilesDirectory"]
+            var musicFilesPath = @"c:\Users\Konrad\Music"; // string path = ConfigurationManager.AppSettings["MusicFilesDirectory"]
             var filePath = string.Empty;
 
             OpenFileDialog openFileDialog = new OpenFileDialog();
@@ -142,7 +143,7 @@ namespace KCK_GUI.MVVM.Model
         }
         public void AddMusicFile(string title, string author, string category, double length, int year, int idNumber ,string filePath, string suffix) 
         {
-            var destinationMusicFilesDirectory = ConfigurationManager.AppSettings["MusicFilesDirectory"];     // Tu albo tu lol
+            var destinationMusicFilesDirectory = ConfigurationManager.AppSettings["MusicFilesDirectory"];  
             var finalPath = string.Empty;
             finalPath = destinationMusicFilesDirectory +"\\"+ title + "_" + author + "_" + category + "_" + length + "_" + year + "_" + idNumber + "_"+ suffix;
 
@@ -152,6 +153,34 @@ namespace KCK_GUI.MVVM.Model
         {
             File.Delete(filePath);
         }
+
+        public ObservableCollection<JsonManager> DeletePlaylist(JsonManager jsonManager, JsonManager playlist, ObservableCollection<JsonManager> ListJsonManager)
+        {
+            ListJsonManager.Remove(jsonManager);
+            var jsonFile = JsonConvert.SerializeObject(ListJsonManager);
+            playlist.writeJson(jsonFile);
+
+            return ListJsonManager;
+        }
+
+        public ObservableCollection<JsonManager> AddPlaylist(JsonManager jsonManager, JsonManager playlist ,ObservableCollection<JsonManager> ListJsonManager)
+        {
+            if(ListJsonManager == null) { ListJsonManager = new ObservableCollection<JsonManager>(); }
+
+            ListJsonManager.Add(jsonManager);
+            var jsonFile = JsonConvert.SerializeObject(ListJsonManager);
+            playlist.writeJson(jsonFile);
+
+            return ListJsonManager;
+        }
+
+        public ObservableCollection<JsonManager> ReadPlaylists(JsonManager managerPlaylist)
+        {
+            var cos = JsonConvert.DeserializeObject<List<JsonManager>>(managerPlaylist.getJsonFile());
+
+            return JsonConvert.DeserializeObject<ObservableCollection<JsonManager>>(managerPlaylist.getJsonFile());
+        }
+
 
     }
 }

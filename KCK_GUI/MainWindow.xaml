@@ -108,6 +108,9 @@
                                     <MouseBinding Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext.PlatlistViewCommand}"       
                                               Gesture="LeftClick"
                                               CommandParameter="{Binding}"/>
+                                    <MouseBinding Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext.DeletePlaylistCommand}"       
+                                              Gesture="RightDoubleClick"
+                                              CommandParameter="{Binding}"/>
                                 </Label.InputBindings>
                             </Label>
                         </DataTemplate>

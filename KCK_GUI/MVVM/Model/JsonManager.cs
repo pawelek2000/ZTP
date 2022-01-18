@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace KCK_GUI.MVVM
@@ -23,7 +24,17 @@ namespace KCK_GUI.MVVM
 
         public void writeJson(string JsonFile)
         {
+            if (File.Exists(Path))
+            {
+                File.WriteAllText(Path, JsonFile);
+            }
+            else 
+            { 
+            File.Create(Path).Dispose();
+                
             File.WriteAllText(Path, JsonFile);
+            }
+
         }
 
         public bool IsFileExisting()

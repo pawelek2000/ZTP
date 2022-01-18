@@ -11,6 +11,7 @@ using System.Windows.Threading;
 using KCK_GUI.Core;
 using KCK_GUI.MVVM.Model;
 using Microsoft.Win32;
+using Newtonsoft.Json;
 
 namespace KCK_GUI.MVVM.ViewModel
 {
@@ -28,11 +29,13 @@ namespace KCK_GUI.MVVM.ViewModel
         public RelayCommand SerceBolesneCommand { get; set; }
         public RelayCommand AddViewCommand { get; set; }
         public RelayCommand AddPlaylistViewCommand { get; set; }
+        public RelayCommand DeletePlaylistCommand{ get; set; }
 
         MusicPlayer musicPlayer { get; set; }
         MusicFilesManager musicFilesManager { get; set; }
 
         JsonManager FavJsonManager { get; set; }
+        JsonManager PlaylistJsonManager { get; set; }
         public SearchViewModel SearchVM { get; set; }
         public PlaylistViewModel PlaylistVM { get; set; }
         public AddFileViewModel AddFileVM { get; set; }
@@ -62,7 +65,15 @@ namespace KCK_GUI.MVVM.ViewModel
                 Path = "Data/fav.json"
             };
 
-            JsonManagerList.Add(FavJsonManager);
+            PlaylistJsonManager = new JsonManager
+            {
+                Name = "Playlisty",
+                Path = "Data/playlists.json"
+            };         
+
+            
+
+            
             musicFilesManager.LoadPlaylist(FavJsonManager);
             favSongList = new List<Song>();
             favSongList = musicFilesManager.getAllSongsList();
@@ -71,12 +82,19 @@ namespace KCK_GUI.MVVM.ViewModel
             CurrentSongList = musicFilesManager.getAllSongsList();
             musicPlayer.setCurrentSong(CurrentSongList[0]);
             musicPlayer.Open();
-           
-            for (int i = 1; i < 10; i++) 
-            {
-                JsonManagerList.Add(new JsonManager { Path= "Data/p" + i + ".json", Name = "Playlist " + i });
-            }
-            
+
+             //for (int i = 1; i < 10; i++) 
+            // {
+            //   JsonManagerList.Add(new JsonManager { Path= "Data/p" + i + ".json", Name = "Playlist " + i });
+           // }
+
+            //playlistList = JsonConvert.DeserializeObject<ObservableCollection<JsonManager>>(PlaylistJsonManager.getJsonFile());
+
+            //var siurek = JsonConvert.SerializeObject(JsonManagerList);
+            //PlaylistJsonManager.writeJson(siurek);
+
+            JsonManagerList = musicFilesManager.ReadPlaylists(PlaylistJsonManager);
+
             VolumeSlider = 50;
 
             BitmapImage bi = new BitmapImage();
@@ -112,11 +130,19 @@ namespace KCK_GUI.MVVM.ViewModel
 
             UpdateFavButton();
 
+            DeletePlaylistCommand = new RelayCommand(o => 
+            {
+                JsonManagerList = musicFilesManager.DeletePlaylist(SelectedJsonManager, PlaylistJsonManager , JsonManagerList);              
+
+            });
+
             SearchViewCommand = new RelayCommand(o =>
             {
+                JsonManagerList.Clear();
                 musicPlayer.SwitchIsPlaylsit(false);
                 musicFilesManager.LoadAllMusicFiles();
                 CurrentSongList = musicFilesManager.getAllSongsList();
+                JsonManagerList = musicFilesManager.ReadPlaylists(PlaylistJsonManager);
                 CurrentView = SearchVM;
 
             });
@@ -124,6 +150,11 @@ namespace KCK_GUI.MVVM.ViewModel
             AddPlaylistViewCommand = new RelayCommand(o => 
             {
                 AddNewPlaylistVM = new AddNewPlaylistViewModel();
+
+                AddNewPlaylistVM.jsonManager = PlaylistJsonManager;
+
+                AddNewPlaylistVM.tempList = JsonManagerList;
+
                 CurrentView = AddNewPlaylistVM;
             });
 
@@ -134,10 +165,13 @@ namespace KCK_GUI.MVVM.ViewModel
             });
             PlatlistViewCommand = new RelayCommand(o =>
             {
+                JsonManagerList.Clear();
+
                 SelectedJsonManager = (o as JsonManager);
                 
                 CurrentView = PlaylistVM;
                 PlaylistVM.CurrentJsonFile = SelectedJsonManager;
+                JsonManagerList = musicFilesManager.ReadPlaylists(PlaylistJsonManager);
                 PlaylistVM.UpdatePlaylist();
             });
 
@@ -391,7 +425,11 @@ namespace KCK_GUI.MVVM.ViewModel
             favSongList = musicFilesManager.getCurrentPlaylist();
             UpdateFavButton();
         }
-      
+
+
+
+
+
     }
   
 }

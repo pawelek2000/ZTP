@@ -13,7 +13,7 @@
                    FontSize="20"
                    Margin="0,50,0,0"
                    Foreground="#EFAAC4"/>
-            <TextBox Text="{Binding Title, UpdateSourceTrigger=PropertyChanged}"
+            <TextBox Text="{Binding playlistName, UpdateSourceTrigger=PropertyChanged}"
                      Width="300"
                      Height="40"
                      VerticalContentAlignment="Center"
@@ -49,6 +49,6 @@
         <Button Content="Dodaj"
                 Height="30"
                 Width="100" Margin="397,548,34,37"
-                Command="{Binding AddFileCommand}"/>
+                Command="{Binding CreatePlaylistCommand}"/>
     </Grid>
 </UserControl>
