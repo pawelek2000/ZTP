@@ -180,9 +180,12 @@ namespace KCK_GUI.MVVM.ViewModel
         public void UpdatePlaylist() 
         {
             CurrentSongList.Clear();
-            if(CurrentJsonFile!=null)
-            musicFilesManager.LoadPlaylist(CurrentJsonFile);
-            musicFilesManager.getCurrentPlaylist().ForEach(CurrentSongList.Add);
+            if (CurrentJsonFile != null)
+            {
+                musicFilesManager.LoadPlaylist(CurrentJsonFile);
+                if (musicFilesManager.getCurrentPlaylist()!=null)
+                    musicFilesManager.getCurrentPlaylist().ForEach(CurrentSongList.Add);
+            }
         }
         public ObservableCollection<Song> SortByYear(ObservableCollection<Song> Songs)
         {

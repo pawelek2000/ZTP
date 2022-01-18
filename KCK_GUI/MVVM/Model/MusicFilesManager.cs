@@ -49,7 +49,9 @@ namespace KCK_GUI.MVVM.Model
          private void ProcessDirectory(string targetDirectory)
         {
             // Process the list of files found in the directory.
-            string[] fileEntries = Directory.GetFiles(targetDirectory, "*.mp3");
+
+            
+            List<string> fileEntries = Directory.GetFiles(targetDirectory, "*.*", SearchOption.AllDirectories).Where(s => s.EndsWith(".mp3") || s.EndsWith(".wav")).ToList();
             foreach (string fileName in fileEntries)
                 ProcessFile(fileName);
 
@@ -76,12 +78,16 @@ namespace KCK_GUI.MVVM.Model
             }
             foreach (var song in playList) 
             {
-                if (!AllSongsList.Contains(song)) 
+                
+                if (!AllSongsList.Contains(AllSongsList.Find(x => x.Path == song.Path)))
                 {
-                    CurrentPlaylist.Remove(song);
+                    CurrentPlaylist.Remove(CurrentPlaylist.Find(x => x.Path == song.Path));
                 }
                 
-            }        }
+            }
+            string jsonString = JsonConvert.SerializeObject(CurrentPlaylist);
+            jsonManager.writeJson(jsonString);
+        }
 
         public void AddMusicToPlaylist(Song song, JsonManager jsonManager)
         {
@@ -134,11 +140,11 @@ namespace KCK_GUI.MVVM.Model
             }
             return filePath;
         }
-        public void AddMusicFile(string title, string author, string category, double length, int year, int idNumber ,string filePath) 
+        public void AddMusicFile(string title, string author, string category, double length, int year, int idNumber ,string filePath, string suffix) 
         {
             var destinationMusicFilesDirectory = ConfigurationManager.AppSettings["MusicFilesDirectory"];     // Tu albo tu lol
             var finalPath = string.Empty;
-            finalPath = destinationMusicFilesDirectory +"\\"+ title + "_" + author + "_" + category + "_" + length + "_" + year + "_" + idNumber + "_.mp3";
+            finalPath = destinationMusicFilesDirectory +"\\"+ title + "_" + author + "_" + category + "_" + length + "_" + year + "_" + idNumber + "_"+ suffix;
 
             File.Move(filePath, finalPath);
         }

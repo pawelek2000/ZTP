@@ -61,18 +61,17 @@ namespace KCK_GUI.MVVM.ViewModel
                 Name = "Ulubione",
                 Path = "Data/fav.json"
             };
-            
+
             JsonManagerList.Add(FavJsonManager);
             musicFilesManager.LoadPlaylist(FavJsonManager);
+            favSongList = new List<Song>();
             favSongList = musicFilesManager.getAllSongsList();
 
             musicFilesManager.LoadAllMusicFiles();
             CurrentSongList = musicFilesManager.getAllSongsList();
             musicPlayer.setCurrentSong(CurrentSongList[0]);
             musicPlayer.Open();
-
-            //ConfigClass.IsCurrentSongChanged = false;
-
+           
             for (int i = 1; i < 10; i++) 
             {
                 JsonManagerList.Add(new JsonManager { Path= "Data/p" + i + ".json", Name = "Playlist " + i });
@@ -298,7 +297,7 @@ namespace KCK_GUI.MVVM.ViewModel
             musicFilesManager.LoadPlaylist(FavJsonManager);
             favSongList = musicFilesManager.getCurrentPlaylist();
             var song = musicPlayer.getCurrentSong();
-            if (favSongList.Find(p => p.Path == song.Path) != null)
+            if (favSongList !=null && favSongList.Find(p => p.Path == song.Path) != null)
             {
                 bi.UriSource = new Uri(FILLED_HEART_IMAGE, UriKind.Relative);
             }
@@ -368,28 +367,9 @@ namespace KCK_GUI.MVVM.ViewModel
                 bi.EndInit();
                 PlayStopImage.Stretch = Stretch.Fill;
                 PlayStopImage.Source = bi;
-                //ConfigClass.IsCurrentSongChanged = false;
+                
             }
-            //else
-            //{
-            //    Application.Current.Dispatcher.BeginInvoke(
-            //         DispatcherPriority.Background,
-            //        new Action(() => {
-            //            musicPlayer.Stop();
-            //            musicPlayer.Open();
-            //            UpdateFavButton();
-            //            UpdateSongInfo();
-            //            musicPlayer.SetVolume(VolumeSlider);
-            //            musicPlayer.Play();
-            //            BitmapImage bi = new BitmapImage();
-            //            bi.BeginInit();
-            //            bi.UriSource = new Uri(PAUSE_IMAGE, UriKind.Relative);
-            //            bi.EndInit();
-            //            PlayStopImage.Stretch = Stretch.Fill;
-            //            PlayStopImage.Source = bi;
-            //            //ConfigClass.IsCurrentSongChanged = false;
-            //        }));
-            //}
+       
 
         }
         public void SerceBolesne() 

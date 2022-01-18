@@ -120,7 +120,7 @@
                                     Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext.PlayFormSearchCommand}"       
                                     Gesture="LeftDoubleClick"/>
                             <MouseBinding 
-                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext.DeleteFromPlaylistCommand}"       
+                                    Command="{Binding RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type ListBox}}, Path=DataContext.DeleteFileSearchCommand}"       
                                     Gesture="RightDoubleClick"/>
                         </Grid.InputBindings>
                     </Grid>

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace KCK_GUI.MVVM.Model
 {
@@ -17,16 +18,14 @@ namespace KCK_GUI.MVVM.Model
             Path = path;
         }
 
-        public string getXmlFile()
+        public string getXmlFile(string path)
         {
-            return File.ReadAllText(Path);
+            return File.ReadAllText(path);
         }
 
-        public void writeXml(string XmlFile, string savePath)
+        public void writeXml(XDocument xDocument, string savePath)
         {
-            xmlDocument = new XmlDocument();
-            xmlDocument.LoadXml(XmlFile);
-            xmlDocument.Save(savePath);
+            xDocument.Save(savePath);
         }
 
         public bool isFileExisting()

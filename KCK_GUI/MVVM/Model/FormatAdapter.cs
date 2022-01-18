@@ -3,9 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization.Json;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Script.Serialization;
 using System.Xml;
+using System.Xml.Linq;
 
 namespace KCK_GUI.MVVM.Model
 {
@@ -17,30 +20,36 @@ namespace KCK_GUI.MVVM.Model
         {
             xmlManager = new XmlManager(Path);
         }
-        public string getJsonFile()
+        new public string getJsonFile()
         {
-            
-            string xmlTekst = xmlManager.getXmlFile();
-
+            var xml = xmlManager.getXmlFile(Path);
             XmlDocument doc = new XmlDocument();
-            doc.LoadXml(xmlTekst);
-            string json = JsonConvert.SerializeXmlNode(doc, Newtonsoft.Json.Formatting.Indented, true);
+            doc.LoadXml(xml);
 
-            return json;
+            string jsonText = JsonConvert.SerializeXmlNode(doc);
+            return jsonText;
         }
 
-        public void writeJson(string JsonFile, string savePath)
+         new public void writeJson(string JsonFile)
         {
-            XmlDocument doc = JsonConvert.DeserializeXmlNode(JsonFile);
-            xmlManager.writeXml(JsonFile, savePath);
+            var xml = XDocument.Load(JsonReaderWriterFactory.CreateJsonReader(Encoding.ASCII.GetBytes(JsonFile), new XmlDictionaryReaderQuotas()));
+            xmlManager.writeXml(xml, Path);
         }
 
-        public bool IsFileExisting()
+         new public bool IsFileExisting()
         {
             if (new FileInfo(Path).Length > 8)
                 return true;
             else
                 return false;
+        }
+        private static Dictionary<string, object> GetXmlData(XElement xml)
+        {
+            var attr = xml.Attributes().ToDictionary(d => d.Name.LocalName, d => (object)d.Value);
+            if (xml.HasElements) attr.Add("_value", xml.Elements().Select(e => GetXmlData(e)));
+            else if (!xml.IsEmpty) attr.Add("_value", xml.Value);
+
+            return new Dictionary<string, object> { { xml.Name.LocalName, attr } };
         }
     }
 }

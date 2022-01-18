@@ -18,6 +18,7 @@ namespace KCK_GUI.MVVM.ViewModel
 
         public RelayCommand SearchBoxCommand { get; set; }
         public RelayCommand PlayFormSearchCommand { get; set; }
+        public RelayCommand DeleteFileSearchCommand { get; set; }
         public List<Song>  TempList { get; set; }
         MusicPlayer musicPlayer { get; set; }
         MusicFilesManager musicFilesManager { get; set; }
@@ -33,6 +34,12 @@ namespace KCK_GUI.MVVM.ViewModel
             PlayFormSearchCommand = new RelayCommand(o =>
             {
                 PlayFromSearch(SelectedMusicFile);
+            });
+
+            DeleteFileSearchCommand = new RelayCommand(o=> 
+            {
+                musicFilesManager.DeleteMusicFile(SelectedMusicFile.Path);
+                TestText.Remove(SelectedMusicFile);
             });
 
         }

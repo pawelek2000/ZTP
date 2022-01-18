@@ -35,12 +35,15 @@ namespace KCK_GUI.MVVM.ViewModel
             {
                 if (FilePath != null && Title != null && !Title.Contains('_') && Author != null && !Author.Contains('_') && Category != null && !Category.Contains('_') && Year > 1500 && Year < 2023)
                 {
-                    
+                    if (FilePath.Contains(".mp3"))
+                        Suffix = ".mp3";
+                    else
+                        Suffix = ".wav";
                     var test = musicPlayer.getCurrentSong();
                     double length = musicPlayer.getSongLengthInMilliseconds();
                     Random random = new Random();
                     int randomNumber = random.Next();
-                    musicFilesManager.AddMusicFile(Title, Author, Category, length, Year, randomNumber, FilePath);
+                    musicFilesManager.AddMusicFile(Title, Author, Category, length, Year, randomNumber, FilePath , Suffix);
                     musicPlayer.setCurrentSong(musicFilesManager.getAllSongsList()[0]);
                     musicPlayer.Stop();
                 }
@@ -106,6 +109,16 @@ namespace KCK_GUI.MVVM.ViewModel
         }
         private int _year;
 
+        public string Suffix
+        {
+            get { return _suffix; }
+            set
+            {
+                _suffix = value;
+                OnPropertyChanged();
+            }
+        }
+        private string _suffix;
         public Song AddingSong
         {
             get { return _addingSong; }
