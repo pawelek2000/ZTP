@@ -44,6 +44,7 @@ namespace KCK_GUI.MVVM.ViewModel
                     Random random = new Random();
                     int randomNumber = random.Next();
                     musicFilesManager.AddMusicFile(Title, Author, Category, length, Year, randomNumber, FilePath , Suffix);
+                    musicFilesManager.LoadAllMusicFiles();
                     musicPlayer.setCurrentSong(musicFilesManager.getAllSongsList()[0]);
                     musicPlayer.Stop();
                 }

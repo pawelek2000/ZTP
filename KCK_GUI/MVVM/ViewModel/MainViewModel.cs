@@ -64,25 +64,27 @@ namespace KCK_GUI.MVVM.ViewModel
                 Name = "Ulubione",
                 Path = "Data/fav.json"
             };
-
+            
             PlaylistJsonManager = new JsonManager
             {
                 Name = "Playlisty",
                 Path = "Data/playlists.json"
-            };         
+            };
 
-            
+           
 
-            
+
             musicFilesManager.LoadPlaylist(FavJsonManager);
             favSongList = new List<Song>();
             favSongList = musicFilesManager.getAllSongsList();
 
             musicFilesManager.LoadAllMusicFiles();
             CurrentSongList = musicFilesManager.getAllSongsList();
-            musicPlayer.setCurrentSong(CurrentSongList[0]);
-            musicPlayer.Open();
-
+            if (CurrentSongList.Count > 0)
+            {
+                musicPlayer.setCurrentSong(CurrentSongList[0]);
+                musicPlayer.Open();
+            }
              //for (int i = 1; i < 10; i++) 
             // {
             //   JsonManagerList.Add(new JsonManager { Path= "Data/p" + i + ".json", Name = "Playlist " + i });
@@ -132,6 +134,7 @@ namespace KCK_GUI.MVVM.ViewModel
 
             DeletePlaylistCommand = new RelayCommand(o => 
             {
+                if(SelectedJsonManager.Path!= "Data/fav.json")
                 JsonManagerList = musicFilesManager.DeletePlaylist(SelectedJsonManager, PlaylistJsonManager , JsonManagerList);              
 
             });
@@ -347,14 +350,18 @@ namespace KCK_GUI.MVVM.ViewModel
         public void UpdateSongInfo() 
         {
             var song = musicPlayer.getCurrentSong();
-            Title = song.Title;
-            SongTime = musicPlayer.getSongLength();
-            CurrentTime = musicPlayer.getCurrentSongTime();
-            MainProgresBar = musicPlayer.getCurrentSongTimePercent();
+            if (song != null)
+            {
+                Title = song.Title;
+                SongTime = musicPlayer.getSongLength();
+                CurrentTime = musicPlayer.getCurrentSongTime();
+                MainProgresBar = musicPlayer.getCurrentSongTimePercent();
+            }
         }
 
         public void PlayNext() 
         {
+            if (CurrentSongList.Count > 0) { 
             ValidatePlaylist();
 
             if (CurrentSongList.Count > CurrentSongList.IndexOf(CurrentSongList.Find(p => p.Path == musicPlayer.getCurrentSong().Path)) + 1)
@@ -363,18 +370,22 @@ namespace KCK_GUI.MVVM.ViewModel
                 musicPlayer.setCurrentSong(CurrentSongList[0]);
 
             PlayNew();
+            }
 
         }
         public void PlayPrev() 
         {
-            ValidatePlaylist();
+            if (CurrentSongList.Count > 0)
+            {
+                ValidatePlaylist();
 
-            if (0 <= CurrentSongList.IndexOf(CurrentSongList.Find(p => p.Path == musicPlayer.getCurrentSong().Path)) - 1)
-                musicPlayer.setCurrentSong(CurrentSongList[(CurrentSongList.IndexOf(CurrentSongList.Find(p => p.Path == musicPlayer.getCurrentSong().Path))-1)]);
-            else
-                musicPlayer.setCurrentSong(CurrentSongList[CurrentSongList.Count -1]);
+                if (0 <= CurrentSongList.IndexOf(CurrentSongList.Find(p => p.Path == musicPlayer.getCurrentSong().Path)) - 1)
+                    musicPlayer.setCurrentSong(CurrentSongList[(CurrentSongList.IndexOf(CurrentSongList.Find(p => p.Path == musicPlayer.getCurrentSong().Path)) - 1)]);
+                else
+                    musicPlayer.setCurrentSong(CurrentSongList[CurrentSongList.Count - 1]);
 
-            PlayNew();
+                PlayNew();
+            }
         }
         public void ValidatePlaylist()
         {
@@ -408,22 +419,25 @@ namespace KCK_GUI.MVVM.ViewModel
         }
         public void SerceBolesne() 
         {
-            musicFilesManager.LoadPlaylist(FavJsonManager);
-            favSongList = musicFilesManager.getCurrentPlaylist();
-            var song = musicPlayer.getCurrentSong();
-            if (favSongList.Find(p => p.Path == song.Path) != null)
+            if (CurrentSongList.Count > 0)
             {
+                musicFilesManager.LoadPlaylist(FavJsonManager);
+                favSongList = musicFilesManager.getCurrentPlaylist();
+                var song = musicPlayer.getCurrentSong();
+                if (favSongList.Find(p => p.Path == song.Path) != null)
+                {
 
-                musicFilesManager.DeleteMusicFromPlaylist(song, FavJsonManager);
-            }
-            else
-            {
+                    musicFilesManager.DeleteMusicFromPlaylist(song, FavJsonManager);
+                }
+                else
+                {
 
-                musicFilesManager.AddMusicToPlaylist(song, FavJsonManager);
+                    musicFilesManager.AddMusicToPlaylist(song, FavJsonManager);
+                }
+                musicFilesManager.LoadPlaylist(FavJsonManager);
+                favSongList = musicFilesManager.getCurrentPlaylist();
+                UpdateFavButton();
             }
-            musicFilesManager.LoadPlaylist(FavJsonManager);
-            favSongList = musicFilesManager.getCurrentPlaylist();
-            UpdateFavButton();
         }
 
 

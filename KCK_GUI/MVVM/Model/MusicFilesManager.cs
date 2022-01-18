@@ -71,6 +71,8 @@ namespace KCK_GUI.MVVM.Model
         {
             LoadAllMusicFiles();
             List<Song> playList = new List<Song>();
+            if(CurrentPlaylist!=null)
+            CurrentPlaylist.Clear();
             if (jsonManager.IsFileExisting())
             {
                 playList = JsonConvert.DeserializeObject<List<Song>>(jsonManager.getJsonFile());
