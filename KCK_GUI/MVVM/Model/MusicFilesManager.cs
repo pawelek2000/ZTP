@@ -81,9 +81,7 @@ namespace KCK_GUI.MVVM.Model
                     CurrentPlaylist.Remove(song);
                 }
                 
-            }
-            CurrentPlaylist = playList;
-        }
+            }        }
 
         public void AddMusicToPlaylist(Song song, JsonManager jsonManager)
         {

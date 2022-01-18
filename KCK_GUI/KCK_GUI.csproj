@@ -94,6 +94,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="MVVM\View\AddNewPlaylistView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MVVM\View\PlaylistView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -122,6 +126,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Theme\SuperRadioButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MVVM\Model\FormatAdapter.cs" />
@@ -131,11 +139,15 @@
     <Compile Include="MVVM\Model\Song.cs" />
     <Compile Include="MVVM\Model\XmlManager.cs" />
     <Compile Include="MVVM\ViewModel\AddFileViewModel.cs" />
+    <Compile Include="MVVM\ViewModel\AddNewPlaylistViewModel.cs" />
     <Compile Include="MVVM\ViewModel\MainViewModel.cs" />
     <Compile Include="MVVM\ViewModel\PlaylistViewModel.cs" />
     <Compile Include="MVVM\ViewModel\SearchViewModel.cs" />
     <Compile Include="MVVM\View\AddFileView.xaml.cs">
       <DependentUpon>AddFileView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="MVVM\View\AddNewPlaylistView.xaml.cs">
+      <DependentUpon>AddNewPlaylistView.xaml</DependentUpon>
     </Compile>
     <Compile Include="MVVM\View\PlaylistView.xaml.cs">
       <DependentUpon>PlaylistView.xaml</DependentUpon>

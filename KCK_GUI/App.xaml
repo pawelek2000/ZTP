@@ -14,6 +14,7 @@
                 <ResourceDictionary Source="Theme/MenuProgressBarTheme.xaml"/>
                 <ResourceDictionary Source="Theme/MusicManagerButtonTheme.xaml"/>
                 <ResourceDictionary Source="Theme/MySliderTheme.xaml"/>
+                <ResourceDictionary Source="Theme/SuperRadioButton.xaml"/>
             </ResourceDictionary.MergedDictionaries>
 
             <DataTemplate DataType="{x:Type viewModel:SearchViewModel}">
@@ -26,6 +27,10 @@
 
             <DataTemplate DataType="{x:Type viewModel:AddFileViewModel}">
                 <view:AddFileView/>
+            </DataTemplate>
+
+            <DataTemplate DataType="{x:Type viewModel:AddNewPlaylistViewModel}">
+                <view:AddNewPlaylistView/>
             </DataTemplate>
 
         </ResourceDictionary>

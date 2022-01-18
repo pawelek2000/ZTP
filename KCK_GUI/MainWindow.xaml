@@ -251,14 +251,24 @@
                      Foreground="#EFAAC4" 
                      Background="Transparent"
                      Command="{Binding AddViewCommand}" Margin="13,70,156,5" Grid.Row="2">
-                
+
 
                 <Image Source="Images\add_music_button.png"
                        Width="20"
                        Height="20"/>
 
             </Button>
+            <Button  FontSize="23"
+                     Foreground="#EFAAC4" 
+                     Background="Transparent"
+                     Command="{Binding AddPlaylistViewCommand}" Margin="14,110,156,516" Grid.RowSpan="2">
 
+
+                <Image Source="Images\add_music_button.png"
+                       Width="20"
+                       Height="20"/>
+
+            </Button>
 
         </Grid>
 
