@@ -238,7 +238,7 @@ namespace KCK_GUI.MVVM.ViewModel
                 TitleSort = true;
                 YearSort = false;
                 DurationSort = false;
-                return Songs = new ObservableCollection<Song>(Songs.OrderBy(p => p.Length));
+                return Songs = new ObservableCollection<Song>(Songs.OrderBy(p => p.Title));
             }
         }
     }

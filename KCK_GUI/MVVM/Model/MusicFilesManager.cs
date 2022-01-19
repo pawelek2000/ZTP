@@ -161,7 +161,7 @@ namespace KCK_GUI.MVVM.Model
             ListJsonManager.Remove(jsonManager);
             var jsonFile = JsonConvert.SerializeObject(ListJsonManager);
             playlist.writeJson(jsonFile);
-
+            File.Delete(jsonManager.Path);
             return ListJsonManager;
         }
 
