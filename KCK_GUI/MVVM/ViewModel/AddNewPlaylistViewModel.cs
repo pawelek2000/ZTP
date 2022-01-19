@@ -14,10 +14,10 @@ namespace KCK_GUI.MVVM.ViewModel
     {
 
         public RelayCommand CreatePlaylistCommand { get; set; }
-        public JsonManager jsonManager { get; set; }
+        public PlaylistManager jsonManager { get; set; }
         public MusicFilesManager musicFilesManager { get; set; }
 
-        public ObservableCollection<JsonManager> tempList { get; set; }
+        public ObservableCollection<PlaylistManager> tempList { get; set; }
         
         public AddNewPlaylistViewModel()
         {
@@ -31,7 +31,7 @@ namespace KCK_GUI.MVVM.ViewModel
                     var path = "Data/" + playlistName + ".json";
                     //File.Create(path);
 
-                    var newJsonManager = new JsonManager
+                    var newJsonManager = new PlaylistManager
                     {
                         Name = playlistName,
                         Path = path

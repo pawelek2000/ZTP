@@ -12,7 +12,7 @@ using System.Xml.Linq;
 
 namespace KCK_GUI.MVVM.Model
 {
-    class FormatAdapter : JsonManager
+    class FormatAdapter : PlaylistManager
     {
         private  XmlManager xmlManager { get; set; }
 

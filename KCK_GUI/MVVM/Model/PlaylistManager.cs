@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace KCK_GUI.MVVM
 {
-    public class JsonManager
+    public class PlaylistManager
     {
         public string Path { get; set; }
         public string Name { get; set; }

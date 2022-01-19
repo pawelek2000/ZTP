@@ -22,7 +22,7 @@ namespace KCK_GUI.MVVM.ViewModel
         public List<Song> TempList { get; set; }
         MusicPlayer musicPlayer { get; set; }
         MusicFilesManager musicFilesManager { get; set; }
-        public JsonManager CurrentJsonFile { get; set; }
+        public PlaylistManager CurrentJsonFile { get; set; }
         public bool TitleSort { get; set; }
         public bool YearSort { get; set; }
         public bool DurationSort { get; set; }

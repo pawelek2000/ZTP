@@ -67,7 +67,7 @@ namespace KCK_GUI.MVVM.Model
             AllSongsList.Add(songDataReader.ReadData(path));
         }
         //Pobieranie playlisty
-        public void LoadPlaylist(JsonManager jsonManager)
+        public void LoadPlaylist(PlaylistManager jsonManager)
         {
             LoadAllMusicFiles();
             List<Song> playList = new List<Song>();
@@ -92,7 +92,7 @@ namespace KCK_GUI.MVVM.Model
             jsonManager.writeJson(jsonString);
         }
 
-        public void AddMusicToPlaylist(Song song, JsonManager jsonManager)
+        public void AddMusicToPlaylist(Song song, PlaylistManager jsonManager)
         {
             List<Song> playList = new List<Song>();
             if (jsonManager.IsFileExisting())
@@ -108,7 +108,7 @@ namespace KCK_GUI.MVVM.Model
             }
         }
 
-        public void DeleteMusicFromPlaylist(Song song, JsonManager jsonManager)
+        public void DeleteMusicFromPlaylist(Song song, PlaylistManager jsonManager)
         {
             List<Song> playList = new List<Song>();
             if (jsonManager.IsFileExisting())
@@ -156,7 +156,7 @@ namespace KCK_GUI.MVVM.Model
             File.Delete(filePath);
         }
 
-        public ObservableCollection<JsonManager> DeletePlaylist(JsonManager jsonManager, JsonManager playlist, ObservableCollection<JsonManager> ListJsonManager)
+        public ObservableCollection<PlaylistManager> DeletePlaylist(PlaylistManager jsonManager, PlaylistManager playlist, ObservableCollection<PlaylistManager> ListJsonManager)
         {
             ListJsonManager.Remove(jsonManager);
             var jsonFile = JsonConvert.SerializeObject(ListJsonManager);
@@ -165,9 +165,9 @@ namespace KCK_GUI.MVVM.Model
             return ListJsonManager;
         }
 
-        public ObservableCollection<JsonManager> AddPlaylist(JsonManager jsonManager, JsonManager playlist ,ObservableCollection<JsonManager> ListJsonManager)
+        public ObservableCollection<PlaylistManager> AddPlaylist(PlaylistManager jsonManager, PlaylistManager playlist ,ObservableCollection<PlaylistManager> ListJsonManager)
         {
-            if(ListJsonManager == null) { ListJsonManager = new ObservableCollection<JsonManager>(); }
+            if(ListJsonManager == null) { ListJsonManager = new ObservableCollection<PlaylistManager>(); }
 
             ListJsonManager.Add(jsonManager);
             var jsonFile = JsonConvert.SerializeObject(ListJsonManager);
@@ -176,11 +176,11 @@ namespace KCK_GUI.MVVM.Model
             return ListJsonManager;
         }
 
-        public ObservableCollection<JsonManager> ReadPlaylists(JsonManager managerPlaylist)
+        public ObservableCollection<PlaylistManager> ReadPlaylists(PlaylistManager managerPlaylist)
         {
-            var cos = JsonConvert.DeserializeObject<List<JsonManager>>(managerPlaylist.getJsonFile());
+            var cos = JsonConvert.DeserializeObject<List<PlaylistManager>>(managerPlaylist.getJsonFile());
 
-            return JsonConvert.DeserializeObject<ObservableCollection<JsonManager>>(managerPlaylist.getJsonFile());
+            return JsonConvert.DeserializeObject<ObservableCollection<PlaylistManager>>(managerPlaylist.getJsonFile());
         }
 
 

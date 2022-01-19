@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{427B3C18-3CCF-4C15-B407-2C95A2860C40}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>WinExe</OutputType>
     <RootNamespace>KCK_GUI</RootNamespace>
     <AssemblyName>KCK_GUI</AssemblyName>
     <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
@@ -137,7 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MVVM\Model\FormatAdapter.cs" />
-    <Compile Include="MVVM\Model\JsonManager.cs" />
+    <Compile Include="MVVM\Model\PlaylistManager.cs" />
     <Compile Include="MVVM\Model\MusicFilesManager.cs" />
     <Compile Include="MVVM\Model\MusicPlayer.cs" />
     <Compile Include="MVVM\Model\Song.cs" />

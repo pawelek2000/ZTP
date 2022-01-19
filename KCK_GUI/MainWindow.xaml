@@ -84,8 +84,8 @@
             <Border Grid.Row="0" Grid.RowSpan="2" BorderThickness="0,0,2,0" BorderBrush="#5E636E" Margin="0,150,0,10">
 
                 <ListBox Background="Transparent"
-                             ItemsSource="{Binding JsonManagerList}"
-                             SelectedItem="{Binding SelectedJsonManager}"
+                             ItemsSource="{Binding PlaylistsList}"
+                             SelectedItem="{Binding SelectedPlaylistManager}"
                              BorderBrush="Transparent"
                              ScrollViewer.CanContentScroll="False"
                              ScrollViewer.HorizontalScrollBarVisibility="Hidden"
